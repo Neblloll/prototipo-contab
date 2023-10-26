@@ -15,7 +15,9 @@ export default function TabRoutes() {
 
     return (
 
-        <Tab.Navigator 
+        <Tab.Navigator
+            initialRouteName = 'home'
+            backBehavior = "none"
             screenOptions = {{
                 title: '',
 
@@ -56,7 +58,7 @@ export default function TabRoutes() {
                             </View>
                         )
                         :
-                        <FontAwesome5 name = 'calendar-check' size = {size} color = {'#2BCDF9'} />
+                        <FontAwesome5 name = 'calendar-check' size = {size} color = {'#FFF'} />
                     )
                 }}
             />
@@ -75,7 +77,7 @@ export default function TabRoutes() {
                             </View>
                         )
                         :
-                        <FontAwesome5 name = 'calendar-plus' size = {size} color = {'#2BCDF9'} />
+                        <FontAwesome5 name = 'calendar-plus' size = {size} color = {'#FFF'} />
                     )
                 }}
             />
@@ -94,7 +96,7 @@ export default function TabRoutes() {
                             </View>
                         )
                         :
-                        <FontAwesome5 name = 'home' size = {size} color = {'#2BCDF9'} />
+                        <FontAwesome5 name = 'home' size = {size} color = {'#FFF'} />
                     )
                 }}
             />
@@ -113,7 +115,7 @@ export default function TabRoutes() {
                                 </View>
                             )
                             :
-                            <FontAwesome5 name = 'user-plus' size = {size} color = {'#2BCDF9'} />
+                            <FontAwesome5 name = 'user-plus' size = {size} color = {'#FFF'} />
                         )
                     }}
             />
@@ -132,7 +134,7 @@ export default function TabRoutes() {
                             </View>
                         )
                         :
-                        <FontAwesome5 name = 'user-alt' size = {size} color = {'#2BCDF9'} />
+                        <FontAwesome5 name = 'user-alt' size = {size} color = {'#FFF'} />
                     )
                 }}
             />
