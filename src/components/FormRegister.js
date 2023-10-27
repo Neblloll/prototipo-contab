@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 
-export function FormRegisterClient({ titleInput, type }) {
+export function FormRegister({ titleInput, type}) {
 
     return(
         <View style = {styles.containerInput}>
@@ -15,7 +15,7 @@ export function FormRegisterClient({ titleInput, type }) {
     );
 };
 
-export const ButtonForm = () => {
+export function ButtonForm() {
 
     return(
         <View>

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet,Text, ScrollView } from "react-native";
 
-import {FormRegisterClient, ButtonForm} from "../../components/FormRegisterClient";
+import {FormRegister, ButtonForm} from "../../components/FormRegister";
 
 export default function RegisterClient() {
 
@@ -22,42 +22,43 @@ export default function RegisterClient() {
 
                 <View style = {{flexDirection: 'column', width: '90%'}}>
 
-                    <FormRegisterClient titleInput = {'Nome/Razão Social'} />
-                    <FormRegisterClient titleInput = {'CPF/CNPJ'} type = {'numeric'} />
-                    <FormRegisterClient titleInput = {'Inscrição Municipal'} />
-                    <FormRegisterClient titleInput = {'Endereço'} />
-
-                    <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
-
-                        <View style = {{width: '35%'}}>
-                            <FormRegisterClient titleInput = {'Número'} type = {'numeric'} />
-                        </View>
-
-                        <View style = {{width: '60%'}}>
-                            <FormRegisterClient titleInput = {'Complemento'} />
-                        </View>
-
-                    </View>
+                    <FormRegister titleInput = {'Nome/Razão Social'} />
+                    <FormRegister titleInput = {'CPF/CNPJ'} type = {'numeric'} />
+                    <FormRegister titleInput = {'Inscrição Municipal'} />
 
                     <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
 
                         <View style = {{width: '60%'}}>
-                            <FormRegisterClient titleInput = {'CEP'} type = {'numeric'} />
+                            <FormRegister titleInput = {'CEP'} type = {'numeric'} />
                         </View>
 
                         <View style = {{width: '35%'}}>
-                            <FormRegisterClient titleInput = {'UF'} />
+                            <FormRegister titleInput = {'UF'} />
                         </View>
 
                     </View>                    
 
-                    <FormRegisterClient titleInput = {'Bairro'} />
-                    <FormRegisterClient titleInput = {'Telefone'} type = {'numeric'} />
-                    <FormRegisterClient titleInput = {'Email'} type = {'email-adress'} />
-                    <FormRegisterClient titleInput = {'Razão Reduzida'} />
-                    <FormRegisterClient titleInput = {'Data de Cadastro'} type = {'numeric'} />
-                    <FormRegisterClient titleInput = {'Indicação'} />
-                    <FormRegisterClient titleInput = {'Comissão'} type = {'numeric'} />
+                    <FormRegister titleInput = {'Endereço'} />
+
+                    <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
+
+                        <View style = {{width: '35%'}}>
+                            <FormRegister titleInput = {'Número'} type = {'numeric'} />
+                        </View>
+
+                        <View style = {{width: '60%'}}>
+                            <FormRegister titleInput = {'Complemento'} />
+                        </View>
+
+                    </View>
+
+                    <FormRegister titleInput = {'Bairro'} />
+                    <FormRegister titleInput = {'Telefone'} type = {'numeric'} />
+                    <FormRegister titleInput = {'Email'} type = {'email-address'} />
+                    <FormRegister titleInput = {'Razão Reduzida'} />
+                    <FormRegister titleInput = {'Data de Cadastro'} type = {'numeric'} />
+                    <FormRegister titleInput = {'Indicação'} />
+                    <FormRegister titleInput = {'Comissão'} type = {'numeric'} />
 
                     <ButtonForm />
 
