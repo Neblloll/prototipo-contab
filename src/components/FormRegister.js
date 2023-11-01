@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 
-export function FormRegister({ titleInput, type}) {
+export function FormRegister({ titleInput, type, data, onClose = () =>{}}) {
 
     return(
         <View style = {styles.containerInput}>
@@ -10,16 +10,18 @@ export function FormRegister({ titleInput, type}) {
                 style = {styles.contentInput}
                 keyboardType = {type || 'default'}
                 autoCapitalize = "words"
+                value={data}
+                onChangeText={onClose}
             />
         </View>
     );
 };
 
-export function ButtonForm() {
+export function ButtonForm({ pressionado = () => {}}) {
 
     return(
         <View>
-            <TouchableOpacity style = {styles.buttonFormContainer}>
+            <TouchableOpacity style = {styles.buttonFormContainer} onPress={pressionado}>
                 <Text style = {{color: '#FFF', fontSize: 20}}>ENVIAR</Text>
             </TouchableOpacity>
         </View>
