@@ -4,16 +4,22 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import Cliente from "../../services/sqlite/Cliente";
 import { Button } from "../../components/Buttons";
 import { Text } from "react-native";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function Clients() {
 
     const [clientes, setClientes] = useState()
+    const [clientesBuscados, setClientesBuscados] = useState(false)
 
     useEffect(() => {
-       Cliente.all()
-        .then(clientes => setClientes(clientes))
-        console.log(clientes)
+        buscaClientes()
     }, [])
+
+    const buscaClientes = async () => {
+        await Cliente.all()
+        .then(clientes => setClientes(clientes))
+        setClientesBuscados(true)
+    }
 
     return(
 
@@ -26,9 +32,9 @@ export default function Clients() {
             >
             
                 <View style = {{flex: 1, width: '90%'}}>
-                    {clientes ? clientes.map((e) => (
-                        <Button name = {e.nomeRazaoSocial} description = {e.cpfOuCnpj} />
-                    )) : <Text>SEM CLIENTES CADASTRADOS</Text>}
+                    {clientesBuscados ? [clientes ? clientes.map((e) => (
+                        <Button name = {e.nomeRazaoSocial} description = {e.cpfOuCnpj} color={"#5ED9FC"} icon={faUser}/>
+                    )) : <Text>SEM CLIENTES CADASTRADOS</Text>] : <Text>BUSCANDO</Text>}
 
                     {/* <Button name = {'Mercado'} description = {'Compra'} />
                     <Button name = {'Mercado'} description = {'Compra'} />

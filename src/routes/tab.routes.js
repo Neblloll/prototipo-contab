@@ -7,6 +7,11 @@ import RegisterNFE from "../pages/register-nfe/RegisterNFE";
 import Home from "../pages/home/Home";
 import RegisterClient from "../pages/register-client/RegisterClient";
 import Clients from "../pages/clients/Clients";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faFile, faFileCircleCheck, faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faFileCirclePlus, faFileCircleCheck)
 
 const Tab = createBottomTabNavigator();
 
@@ -54,11 +59,11 @@ export default function TabRoutes() {
                         (
                             <View style = {styles.containerFocusIcon}>
                                 <View style = {styles.focusIcon} />
-                                <FontAwesome5 name = 'calendar-check' size = {size + 7} color = {'#2BCDF9'} />
+                                <FontAwesomeIcon icon={faFileCircleCheck} size = {size + 7} color = {'#2BCDF9'} />
                             </View>
                         )
                         :
-                        <FontAwesome5 name = 'calendar-check' size = {size} color = {'#FFF'} />
+                        <FontAwesomeIcon icon={faFileCircleCheck} size = {size + 2} color = {'#FFF'} />
                     )
                 }}
             />
@@ -73,11 +78,11 @@ export default function TabRoutes() {
                         (
                             <View style = {styles.containerFocusIcon}>
                                 <View style = {styles.focusIcon} />
-                                <FontAwesome5 name = 'calendar-plus' size = {size + 7} color = {'#2BCDF9'} />
+                                <FontAwesomeIcon icon={faFileCirclePlus} size = {size + 7} color = {'#2BCDF9'} />
                             </View>
                         )
                         :
-                        <FontAwesome5 name = 'calendar-plus' size = {size} color = {'#FFF'} />
+                        <FontAwesomeIcon icon={faFileCirclePlus} size = {size + 2} color = {'#FFF'} />
                     )
                 }}
             />
@@ -92,11 +97,11 @@ export default function TabRoutes() {
                         (
                             <View style = {styles.containerFocusIcon}>
                                 <View style = {styles.focusIcon} />
-                                <FontAwesome5 name = 'home' size = {size + 7} color = {'#2BCDF9'} />
+                                <FontAwesomeIcon icon={faFile} size = {size + 7} color = {'#2BCDF9'} />
                             </View>
                         )
                         :
-                        <FontAwesome5 name = 'home' size = {size} color = {'#FFF'} />
+                        <FontAwesomeIcon icon={faFile} size = {size + 2} color = {'#FFF'} />
                     )
                 }}
             />

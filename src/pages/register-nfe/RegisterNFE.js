@@ -22,7 +22,51 @@ export default function RegisterNFE() {
 
                 <View style = {{flexDirection: 'column', width: '90%'}}>
 
-                    <FormRegister titleInput = {'Nome/Razão Social'} />
+                    <FormRegister titleInput = {'Número'} />
+
+                    <FormRegister titleInput = {'Data de emissão'} />
+
+                    <FormRegister titleInput = {'Cod. Verificação'} />
+
+                    <FormRegister titleInput = {'Iss retido'} />
+
+                    <FormRegister titleInput = {'Competência'} />
+
+                    <FormRegister titleInput = {'Valor liquido'} />
+
+                    <FormRegister titleInput = {'Base de cálculo'} />
+
+                    <FormRegister titleInput = {'Valor'} />
+
+                    <FormRegister titleInput = {'Cod. tributação municipal'} />
+
+                    <FormRegister titleInput = {'Desconto'} />
+
+                    <FormRegister titleInput = {'Discriminação dos serviços'} />
+
+                    <FormRegister titleInput = {'CPF/CNPJ'} />
+
+                    <FormRegister titleInput = {'Razão Reduzida'} />
+
+                    <FormRegister titleInput = {'Bairro'} />
+
+                    <FormRegister titleInput = {'UF'} />
+
+                    <FormRegister titleInput = {'Pagamento'} />
+
+                    <FormRegister titleInput = {'Vencimento'} />
+
+                    <FormRegister titleInput = {'Juros'} />
+
+                    <FormRegister titleInput = {'Valor pago'} />
+
+                    <FormRegister titleInput = {'Importada em'} />
+
+                    <FormRegister titleInput = {'Imposto Retido'} />
+
+                    <FormRegister titleInput = {'Juros/Multa Abonada'} />
+
+                    <FormRegister titleInput = {'Mês/Ano'} />
 
                     <ButtonForm />
 

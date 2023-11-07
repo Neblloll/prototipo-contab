@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 
 import { Button } from "../../components/Buttons";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 
 export default function Concluded() {
 
@@ -17,8 +18,8 @@ export default function Concluded() {
             
                 <View style = {{flex: 1, width: '90%'}}>
 
-                    <Button name = {'Mercado'} description = {'Compra'} />
-                    <Button name = {'Mercado'} description = {'Compra'} />
+                    <Button name = {'Nota Fulano'} description = {'Compra'} color={"#B4FB97"} icon={faCheck}/>
+                    {/* <Button name = {'Mercado'} description = {'Compra'} />
                     <Button name = {'Mercado'} description = {'Compra'} />
                     <Button name = {'Mercado'} description = {'Compra'} />
                     <Button name = {'Mercado'} description = {'Compra'} />
@@ -26,7 +27,7 @@ export default function Concluded() {
                     <Button />
                     <Button />
                     <Button />
-                    <Button />
+                    <Button /> */}
                    
 
                 </View>

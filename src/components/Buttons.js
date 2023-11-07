@@ -1,7 +1,12 @@
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faClock, faUser, faX, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-export function Button({ name, description }) {
+library.add(faUser, faX, faClock, faCheck)
+
+export function Button({ name, description, icon, color}) {
 
     return(
 
@@ -17,8 +22,17 @@ export function Button({ name, description }) {
 
             </View>
 
-            <View style = {styles.containerIcon}>
-
+            <View style = {{        
+                height: 50,
+                width: 50,
+                position: 'absolute',
+                right: 20,
+                borderRadius: 50,
+                alignItems: "center",
+                justifyContent: 'center',  
+                backgroundColor: color 
+            }}>
+                <FontAwesomeIcon icon={icon} size={30}/>
             </View>
 
         </TouchableOpacity>
@@ -47,7 +61,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 20,
         borderRadius: 50,
-        backgroundColor: '#222',
+        alignItems: "center",
+        justifyContent: 'center',   
+
     },
 
 });
