@@ -10,7 +10,11 @@ export default function App() {
 
       <Routes/>
 
-      <StatusBar backgroundColor = '#000' translucent style = 'inverted' />
+      <StatusBar
+        style = 'inverted'
+        backgroundColor = '#000'
+        translucent = {false}
+      />
 
     </>
 

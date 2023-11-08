@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, BackHandler, Alert } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import Concluded from "../pages/concluded/Concluded";
@@ -16,7 +17,27 @@ library.add(faFileCirclePlus, faFileCircleCheck)
 const Tab = createBottomTabNavigator();
 
 export default function TabRoutes() {
+
+    useEffect(() => {
+        const backAction = () => {
+          Alert.alert('Alerta!', 'Deseja realmete sair?', [
+            {
+              text: 'Não',
+              onPress: () => null,
+              style: 'Cancel',
+            },
+            {text: 'Sim', onPress: () => BackHandler.exitApp()},
+          ]);
+          return true;
+        };
     
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+    
+        return () => backHandler.remove();
+    }, []);
 
     return (
 
