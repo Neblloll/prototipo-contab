@@ -87,7 +87,7 @@ const remove = (id) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "DELETE FROM clientes WHERE id;",
+        "DELETE FROM clientes WHERE id=?;",
         [id],
         (_, { rowsAffected }) => {
           resolve(rowsAffected);
@@ -98,6 +98,29 @@ const remove = (id) => {
   });
 };
 
+const deleteTable = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'DROP TABLE clientes;', [],
+        (tx, results) => {
+          if (results && results.rows && results.rows._array) {
+            /* do something with the items */
+            // results.rows._array holds all the results.
+            console.log(JSON.stringify(results.rows._array));
+            console.log('table dropped')
+          } else {
+            console.log('no results')
+          }
+        },
+        (tx, error) => {
+          console.log(error);
+        }
+      )
+    });
+    });
+}
+
 export default {
   create,
   update,
@@ -105,4 +128,5 @@ export default {
   findByName,
   all,
   remove,
+  deleteTable
 };

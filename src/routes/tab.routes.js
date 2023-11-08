@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, StyleSheet, BackHandler, Alert } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -17,6 +17,9 @@ library.add(faFileCirclePlus, faFileCircleCheck)
 const Tab = createBottomTabNavigator();
 
 export default function TabRoutes() {
+
+    const [atualizaNFE, setAtualizaNFE] = useState()
+    const [atualizaCliente, setAtualizaCliente] = useState()
 
     useEffect(() => {
         const backAction = () => {
@@ -73,6 +76,7 @@ export default function TabRoutes() {
             <Tab.Screen
                 name = 'concluded'
                 component ={Concluded}
+                
                 options = {{
                     headerTitle: 'CONLUÍDO',
                     tabBarIcon: ({ size, color, focused }) => (
@@ -91,7 +95,11 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'register-nfe'
-                component ={RegisterNFE}
+                component ={() => <RegisterNFE onClose={(e) => {
+                    if(e){
+                        setAtualizaNFE(true)
+                    }
+                }}/>}
                 options = {{
                     headerTitle: 'CADASTRO NFE',
                     tabBarIcon: ({ size, color, focused }) => (
@@ -129,7 +137,11 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'register-client'
-                component ={RegisterClient}
+                component ={() => <RegisterClient onClose={(e) => {
+                    if(e){
+                        setAtualizaCliente(e)
+                    }
+                }}/>}
                 options = {{
                     headerTitle: 'CADASTRO CLIENTE',
                     tabBarIcon: ({ size, color, focused }) => (
@@ -148,7 +160,7 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'clients'
-                component ={Clients}
+                component ={() => <Clients teste={atualizaCliente} />}
                 options = {{
                     headerTitle: 'CLIENTES',
                     tabBarIcon: ({ size, color, focused }) => (

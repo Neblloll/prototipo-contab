@@ -1,67 +1,116 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 
 // import { Button } from "../../components/Buttons";
-import { faClock, faX } from "@fortawesome/free-solid-svg-icons";
-import { Avatar, Button, Card, Dialog, Portal, PaperProvider, Text } from 'react-native-paper';
-
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
+import { faClock, faPen, faTrash, faUser, faX } from "@fortawesome/free-solid-svg-icons";
+import { Avatar, Button, Card, Dialog, Portal, PaperProvider, Text, TouchableRipple, List, ActivityIndicator } from 'react-native-paper';
+import NFE from "../../services/sqlite/NFE";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 export default function Home() {
 
     const [visible, setVisible] = useState(false);
+    
+    //
+    const [notasFiscais, setNotasFiscais] = useState()
+    const [notasFiscaisBuscadas, setNotasFiscaisBuscadas] = useState(true)
+    const [notaFiscalDeletada, setNotasFiscalDeletada] = useState()
+    const [nomeNotaFiscalDeletada, setNomeNotaFiscalDeletada] = useState()
 
     const showDialog = () => setVisible(true);
   
     const hideDialog = () => setVisible(false);
+
+    useEffect(() => {
+        buscaNotasFiscais()
+    }, [])
+
+    const buscaNotasFiscais = async () => {
+        await NFE.all()
+        .then(notas => {
+            console.log(notas)
+            setNotasFiscais(notas)
+        })
+        setNotasFiscaisBuscadas(true)
+        console.log(notasFiscais)
+    }
+
+    const deletaCliente = (nota) => {
+        setVisible(!visible)
+        setNotasFiscalDeletada(nota)
+        setNomeNotaFiscalDeletada(nota.numero)
+    }
   
 
     return(
-        <PaperProvider>
+
+    <PaperProvider>
         <View style = {styles.container} >
+            <ScrollView>
+            {notasFiscaisBuscadas ? [notasFiscais[0] ? notasFiscais.map((elem) => (
+               <TouchableRipple style={{
+                    borderColor: "#000", 
+                    borderWidth: 0.8, 
+                    margin: 5, 
+                    borderRadius: 5,
+                }}
+                >
+                    <List.Accordion
+                    titleStyle={{
+                        fontSize: 20, 
+                        color: "#000",
+                        whiteSpace: "nowrap", 
+                        textOverflow: "ellipsis", 
+                        width: "98%", 
+                        display: "block", 
+                        overflow: "hidden"
+                    }}
+                    descriptionStyle={{
+                        fontSize: 20, 
+                        color: "#000",
+                        whiteSpace: "nowrap", 
+                        textOverflow: "ellipsis", 
+                        width: "98%", 
+                        display: "block", 
+                        overflow: "hidden"
+                    }}
+                    descriptionNumberOfLines={1}
+                    description={elem.numero}
+                    title={elem.id}
+                    right={props => <View style = {{        
+                        height: 50,
+                        width: 50,
+                        borderRadius: 50,
+                        alignItems: "center",
+                        justifyContent: 'center',  
+                        backgroundColor: "#5ED9FC" 
+                    }}>
+                            <FontAwesomeIcon icon={faUser} size={30}/>
+                        </View>}
+                    >
+                        <List.Item right={props =>(<>
+                        <List.Item title={<FontAwesomeIcon icon={faPen} color="#5ED9FC"/>} onPress={() => console.log(elem)}/>
+                        <List.Item title={<FontAwesomeIcon icon={faTrash} color="red"/>} onPress={() => {deletaCliente(elem)}}/>
+                        </>
+                        )}/>
+                    
+                    </List.Accordion>
+                </TouchableRipple>)) : <View style={{display: "flex", alignItems: "center", justifyContent: "center", marginTop: 300}}><Text style={{fontSize: 30}} >SEM NOTAS FISCAIS</Text></View>] : <ActivityIndicator color="#5ED9FC" size={100} style={styles.loading} animating={true} />}
 
-            {/* <ScrollView
-                
-                alignItems = 'center'
-                showsVerticalScrollIndicator
-            > */}
-            
-                {/* <View style = {{flex: 1, width: '90%'}}>
-
-                    <Button name = {'Nota Ciclano'} description = {'Compra'} color={"#FA7B7A"} icon={faX} />
-                    <Button name = {'Nota Beltrano'} description = {'Compra'} color={"#FCF999"} icon={faClock} />
-
-                </View> */}
-
-                {/* <Card>
-                    <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
-                    <Card.Content>
-                    <Text variant="titleLarge">Card title</Text>
-                    <Text variant="bodyMedium">Card content</Text>
-                    </Card.Content>
-                    <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
-                    <Card.Actions>
-                    <Button>Cancel</Button>
-                    <Button>Ok</Button>
-                    </Card.Actions>
-                </Card> */}
-                <Button onPress={showDialog}>Show Dialog</Button>
-                <Portal>
-                <Dialog visible={visible} onDismiss={hideDialog}>
-                    <Dialog.Title>Alert</Dialog.Title>
+            </ScrollView>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+                    <Dialog.Title>Deletar</Dialog.Title>
                     <Dialog.Content>
-                    <Text variant="bodyMedium">This is simple dialog</Text>
+                    <Text>Deseja deletar o cliente {nomeNotaFiscalDeletada} ?</Text>
                     </Dialog.Content>
                     <Dialog.Actions>
-                    <Button onPress={hideDialog}>Done</Button>
+                    <Button onPress={hideDialog} textColor="blue">Cancelar</Button>
+                    <Button onPress={hideDialog} textColor="red">Deletar</Button>
                     </Dialog.Actions>
-                </Dialog>
-                </Portal>
-
-            {/* </ScrollView> */}
-
+            </Dialog>
         </View>
     </PaperProvider>
+
 
     );
 };
@@ -71,5 +120,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF',
     },
+    loading: {
+        display: "flex",
+        alignSelf: "center",
+        justifyContent: "center",
+        marginTop: 240
+    }
 
 })

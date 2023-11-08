@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 
 import { ButtonForm, FormRegister } from "../../components/FormRegister";
 import { Snackbar } from "react-native-paper";
+import NFE from "../../services/sqlite/NFE";
 
-export default function RegisterNFE() {
+export default function RegisterNFE({ onClose = () => {} }) {
 
     const [visible, setVisible] = useState(false)
     const [mensagem, setMensagem] = useState()
@@ -24,7 +25,46 @@ export default function RegisterNFE() {
         openSnackBar()
     }
 
+    // useEffect(() => {
+    //     createNota()
+    // }, [])
+
     //
+    const [numero, setNumero] = useState()
+    const [dataDeEmissao, setDataDeEmissao] = useState()
+    const [codVerfificacao, setCodVerificacao] = useState()
+    const [issRetido, setIssRetido] = useState()
+    const [competencia, setCompetencia] = useState()
+    const [valorLiquido, setValorLiquido] = useState()
+    const [baseDeCalculo, setBaseDeCalculo] = useState()
+    const [valor, setValor] = useState()
+    const [codContribuicao, setCodContribuicao] = useState()
+    const [descont, setDesconto] = useState()
+    const [descriminacaoDoServico, setDescriminacaoDoServico] = useState()
+    const [cpfOuCnpj, setCpfOuCnpj] = useState()
+    const [razaoReduzida, setRazaoReduzida] = useState()
+    const [bairro, setBairro] = useState()
+    const [uf, setUf] = useState()
+    const [pagamento, setPagamento] = useState()
+    const [vencimento, setVencimento] = useState()
+    const [juros, setJuros] = useState()
+    const [valorPago, setValorPago] = useState()
+    const [dataImportacao, setDataImpotacao] = useState()
+    const [impostoRetido, setImpostoRetido] = useState()
+    const [jurosAbonado, setJurosAbonado] = useState()
+    const [mesAno, setMesAno] = useState()
+    const [concluded, setConcluded] = useState()
+
+    const createNota = () => {
+        let query = [{numero: "7309872859", concluded: "false", vencimento: "04/11/2023"}]
+        NFE.create(query)
+        .then((id, numero) => console.log(`Nota criado com \nid: ${id}\nNumero: ${numero}`))
+        .catch((err) => console.log(err))
+    }
+
+    const chamaOnClose = () => {
+        onClose("teste")
+    }
 
     return(
 
@@ -120,7 +160,7 @@ export default function RegisterNFE() {
 
                 </View>
 
-                <ButtonForm pressionado={() => chamaError()}/>
+                <ButtonForm pressionado={() => chamaOnClose()}/>
 
             </ScrollView>
 

@@ -5,7 +5,7 @@ import { faPen, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { ActivityIndicator, Dialog, Text, PaperProvider, List, TouchableRipple, Button  } from 'react-native-paper';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-export default function Clients() {
+export default function Clients({ teste }) {
 
     const [visible, setVisible] = useState(false);
 
@@ -15,22 +15,30 @@ export default function Clients() {
     const [clientesBuscados, setClientesBuscados] = useState(false)
     const [clienteDeletado, setClienteDeletado] = useState()
     const [nomeClienteDeletado, setNomeClienteDeletado] = useState()
+    const [atualizar, setAtualizar] = useState(false)
 
     useEffect(() => {
         buscaClientes()
-    }, [])
+    }, [teste, atualizar])
 
     const buscaClientes = async () => {
         await Cliente.all()
         .then(clientes => setClientes(clientes))
         setClientesBuscados(true)
-        console.log(clientes)
     }
 
     const deletaCliente = (cliente) => {
         setVisible(!visible)
         setClienteDeletado(cliente)
         setNomeClienteDeletado(cliente.nomeRazaoSocial)
+    }
+
+    const deleteUser = async () => {
+        await Cliente.remove(clienteDeletado.id)
+        .then((e) => console.log(`\n\n\n\nFOI: ${e}`))
+        .catch((err) => console.log(`\n\n\n\nERROR: ${err}`))
+        hideDialog()
+        setAtualizar(true)
     }
 
 
@@ -67,7 +75,7 @@ export default function Clients() {
                         overflow: "hidden"
                     }}
                     descriptionNumberOfLines={1}
-                    description={elem.cpfOuCnpj}
+                    description={elem.id}
                     title={elem.nomeRazaoSocial}
                     right={props => <View style = {{        
                         height: 50,
@@ -97,7 +105,7 @@ export default function Clients() {
                     </Dialog.Content>
                     <Dialog.Actions>
                     <Button onPress={hideDialog} textColor="blue">Cancelar</Button>
-                    <Button onPress={hideDialog} textColor="red">Deletar</Button>
+                    <Button onPress={deleteUser} textColor="red">Deletar</Button>
                     </Dialog.Actions>
             </Dialog>
         </View>

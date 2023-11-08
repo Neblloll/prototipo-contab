@@ -5,7 +5,7 @@ import Cliente from "../../services/sqlite/Cliente";
 import {FormRegister, ButtonForm} from "../../components/FormRegister";
 import { Snackbar, TextInput } from "react-native-paper";
 
-export default function RegisterClient() {
+export default function RegisterClient({ onClose = () => {}}) {
 
     const [visible, setVisible] = useState(false)
     const [mensagem, setMensagem] = useState()
@@ -37,34 +37,36 @@ export default function RegisterClient() {
     const [comissao, setComissao] = useState()
 
     const confirmaDados = () => {
-        if(nomeRazaoSocial && cpfOuCnpj && inscricaoMunicipal && cep && uf && endereco && numeroEndereco){
+        if(nomeRazaoSocial){
             let query = [{nomeRazaoSocial:nomeRazaoSocial, cpfOuCnpj:cpfOuCnpj, inscricaoMunicipal:inscricaoMunicipal, cep:cep, uf:uf, endereco:endereco, numeroEndereco:numeroEndereco}]
+            console.log(query)
             Cliente.create(query)
-            .then( (id) => {
-                console.log(`Cliente criado com \nid: ${id}\nNome / Razão Social: ${nomeRazaoSocial}`)
-                setNomeRazaoSocial()
-                setCpfOuCnpj()
-                setInscricaoMunicipal()
-                setCep()
-                setUf()
-                setEndereco()
-                setNumeroEndereco()
-                setComplementoEndereco()
-                setBairro()
-                setTelefone()
-                setEmail()
-                setRazaoReduzida()
-                setDataDeCadastro()
-                setIndicacao()
-                setComissao()
-                setRespostaPost(200)
-                setMensagem("Cadastrado com sucesso!")
-                openSnackBar()
+            .then(() => {
+                console.log("criado")
             } )
             .catch( err => {
                 console.log(err)
                 chamaError()
             })
+            setNomeRazaoSocial('')
+            setCpfOuCnpj('')
+            setInscricaoMunicipal('')
+            setCep('')
+            setUf('')
+            setEndereco('')
+            setNumeroEndereco('')
+            setComplementoEndereco('')
+            setBairro('')
+            setTelefone('')
+            setEmail('')
+            setRazaoReduzida('')
+            setDataDeCadastro('')
+            setIndicacao('')
+            setComissao('')
+            setRespostaPost(200)
+            setMensagem("Cadastrado com sucesso!")
+            openSnackBar()   
+            onClose(query)
         } else{
             setRespostaPost(404)
             setMensagem("Faltam dados para terminar registro")
@@ -93,7 +95,10 @@ export default function RegisterClient() {
                 showsVerticalScrollIndicator = {false}
             >
 
-                <FormRegister titleInput = {'Nome/Razão Social'} data={nomeRazaoSocial} onClose={(e) => {setNomeRazaoSocial(e)}}/>
+                <FormRegister titleInput = {'Nome/Razão Social'} data={nomeRazaoSocial} onClose={(e) => {
+                    console.log(e)
+                    setNomeRazaoSocial(e)
+                    }}/>
                 <FormRegister titleInput = {'CPF/CNPJ'} type = {'numeric'} data={cpfOuCnpj} onClose={(e) => {setCpfOuCnpj(e)}}/>
                 <FormRegister titleInput = {'Inscrição Municipal'} data={inscricaoMunicipal} onClose={(e) => {setInscricaoMunicipal(e)}}/>
 

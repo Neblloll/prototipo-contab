@@ -37,9 +37,9 @@ export function ButtonForm({ pressionado = () => {}}) {
             icon = 'send'
             textColor = '#FFF'
             mode = 'contained'
-            loading = {loading}
+            // loading = {loading}
             onPress = {() => {
-                setLoading(true);
+                // setLoading(false);
                 pressionado();
             }}
         >
