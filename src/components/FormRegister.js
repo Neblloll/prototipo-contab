@@ -1,14 +1,20 @@
 import React from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import { Button,TextInput } from "react-native-paper";
 
-export function FormRegister({ titleInput, width, height, alignVTxt, type, multiline, data, onClose = () =>{}}) {
+export function FormRegister({ titleInput, width, height, type, multiline, data, onClose = () =>{}}) {
+
 
     return(
         <View style = {[styles.containerInput, {width: width || '100%'}]}>
 
-            <Text style = {styles.titleInput}>{titleInput}</Text>
             <TextInput
-                style = {[styles.contentInput, {height: height || 40, textAlignVertical: alignVTxt || 'center', paddingVertical: alignVTxt ? 15 : 0}]}
+                style = {[styles.contentInput, {height: height || 50}]}
+                outlineColor = '#075A90'
+                activeOutlineColor = '#075A90'
+                mode = 'outlined'
+                label={titleInput}
                 keyboardType = {type || 'default'}
                 autoCapitalize = "words"
                 multiline = {multiline || false}
@@ -22,12 +28,23 @@ export function FormRegister({ titleInput, width, height, alignVTxt, type, multi
 
 export function ButtonForm({ pressionado = () => {}}) {
 
+    const [loading, setLoading] = useState(false);
+
     return(
-        <View style={{position: "relative"}}>
-            <TouchableOpacity style = {styles.buttonFormContainer} onPress={pressionado}>
-                <Text style = {{color: '#FFF', fontSize: 20}}>ENVIAR</Text>
-            </TouchableOpacity>
-        </View>
+        <Button
+            contentStyle = {{height: 65, alignItems: 'center'}}
+            style = {styles.buttonFormContainer}
+            icon = 'send'
+            textColor = '#FFF'
+            mode = 'contained'
+            loading = {loading}
+            onPress = {() => {
+                setLoading(true);
+                pressionado();
+            }}
+        >
+            ENVIAR
+        </Button>
     );
 };
 
@@ -46,22 +63,14 @@ const styles = StyleSheet.create({
 
     contentInput: {
         width: '100%',
-        fontSize: 18,
         marginTop: 15,
-        paddingHorizontal: 15,
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: '#000'
     },
 
     buttonFormContainer: {
-        height: 65,
-        minWidth: '65%',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: '65%',
         alignSelf: 'center',
         marginVertical: 40,
         borderRadius: 20,
         backgroundColor: '#075A90',
     },
-})
+});

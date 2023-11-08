@@ -76,7 +76,7 @@ export default function RegisterNFE() {
 
                 </View>
 
-                <FormRegister titleInput = {'Discriminação dos serviços'} height={200} alignVTxt={'top'} multiline={true} />
+                <FormRegister titleInput = {'Discriminação dos serviços'} height={200} multiline={true} />
 
                 <View style = {styles.formHorizontal}>
 
