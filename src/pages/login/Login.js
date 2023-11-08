@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { TextInput, Button } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
 
 export default function Login({ navigation }) {
@@ -26,24 +27,38 @@ export default function Login({ navigation }) {
 
                 <View style = {styles.formContent}>
 
-                    <Text style = {styles.formTxt}>Login</Text>
                     <TextInput 
                         style = {styles.formInput}
+                        label = 'Login'
+                        mode = 'outlined'
+                        outlineColor = '#075A90'
+                        activeOutlineColor = '#075A90'
                         autoCapitalize = "none"
                     />
 
-                    <Text style = {styles.formTxt}>Senha</Text>
                     <TextInput 
                         style = {styles.formInput}
+                        label = 'Senha'
+                        mode = 'outlined'
+                        outlineColor = '#075A90'
+                        activeOutlineColor = '#075A90'
                         autoCapitalize = "none"
                     />
 
-                    <TouchableOpacity
+                    <Button
                         style = {styles.formButton}
+                        contentStyle = {{
+                            height: 70,
+                            alignSelf: 'center',
+                        }}
+                        labelStyle = {{
+                            fontSize: 20,
+                            color: '#FFF'
+                        }}
                         onPress = {() => {navigation.navigate('TabRoutes')}}
                     >
-                        <Text style = {{fontSize: 22,fontWeight: 'bold', color: '#FFF'}}>ENVIAR</Text>
-                    </TouchableOpacity>
+                        ENVIAR
+                    </Button>
 
                 </View>
 
@@ -51,7 +66,7 @@ export default function Login({ navigation }) {
 
         </View>
 
-    );
+);
 }
 
 const styles = StyleSheet.create({
@@ -60,46 +75,39 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#075A90'
     },
-
+    
     txtHeader: {
         fontSize: 28,
         fontWeight: 'bold',
         marginLeft: 20,
         color: '#FFF'
     },
-
+    
     formContainer: {
         flex: 4,
         borderTopLeftRadius: 50,
         borderTopRightRadius: 50,
         backgroundColor: '#FFF'
     },
-
+    
     formContent: {
         width: '100%',
-        gap: 20,
+        gap: 25,
+        marginTop: 60,
         paddingTop: 40,
         paddingHorizontal: 50,
     },
-
-    formTxt: {
-        fontSize: 19,
-    },
-
+        
     formInput: {
-        height: 40,
-        fontSize: 18,
-        marginBottom: 30,
-        borderWidth: 2,
-        paddingHorizontal: 20,
-    },
-
-    formButton: {
         height: 60,
-        width: '60%',
-        alignItems: 'center',
+        fontSize: 20,
+        marginBottom: 30,
+        backgroundColor: '#FFF'
+    },
+    
+    formButton: {
+        width: '70%',
         alignSelf: 'center',
-        justifyContent: 'center',
         marginTop: 60,
         borderRadius: 50,
         backgroundColor: '#2BCDF9',

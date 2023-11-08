@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
+import { Button } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
 
 export default function Welcome({ navigation }) {
@@ -27,12 +28,20 @@ export default function Welcome({ navigation }) {
 
                 <Text style = {{fontSize: 19, fontWeight: 'bold', marginHorizontal: 20}}>Controle financeiro simplificado para uma gestão eficiente e intuitiva.</Text>
 
-                <TouchableOpacity 
+                <Button 
                     style = {styles.boxButton}
+                    contentStyle = {{
+                        height: 70,
+                        alignSelf: 'center'
+                    }}
+                    labelStyle ={{
+                        color: '#FFF',
+                        fontSize: 17
+                    }}
                     onPress = {() => navigation.navigate('Login')}
                 >
-                    <Text style = {{fontSize: 22, fontWeight: 'bold', color: '#FFF'}}>PRÓXIMO</Text>
-                </TouchableOpacity>
+                    PRÓXIMO
+                </Button>
             </Animatable.View>
 
         </View>
@@ -58,10 +67,8 @@ const styles = StyleSheet.create({
     },
 
     boxButton: {
-        height: 60,
-        width: '40%',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: '50%',
+        alignSelf: 'center',
         borderRadius: 50,
         backgroundColor: '#2BCDF9',
     }

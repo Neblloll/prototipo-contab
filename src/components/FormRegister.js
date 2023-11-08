@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     contentInput: {
         width: '100%',
         marginTop: 15,
+        backgroundColor: '#FFF',
     },
 
     buttonFormContainer: {
