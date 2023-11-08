@@ -3,9 +3,23 @@ import { View, StyleSheet,Text, ScrollView } from "react-native";
 import Cliente from "../../services/sqlite/Cliente";
 
 import {FormRegister, ButtonForm} from "../../components/FormRegister";
+import { Snackbar, TextInput } from "react-native-paper";
 
 export default function RegisterClient() {
 
+    const [visible, setVisible] = useState(false)
+    const [mensagem, setMensagem] = useState()
+    const [respotaPost, setRespostaPost] = useState()
+
+    const openSnackBar = () => {
+        setVisible(true)
+    }
+
+    const closeSnackBar = () => {
+        setVisible(false)
+    }
+
+    // Dados
     const [nomeRazaoSocial, setNomeRazaoSocial] = useState()
     const [cpfOuCnpj, setCpfOuCnpj] = useState()
     const [inscricaoMunicipal, setInscricaoMunicipal] = useState()
@@ -24,12 +38,44 @@ export default function RegisterClient() {
 
     const confirmaDados = () => {
         if(nomeRazaoSocial && cpfOuCnpj && inscricaoMunicipal && cep && uf && endereco && numeroEndereco){
-            Cliente.create({nomeRazaoSocial:nomeRazaoSocial, cpfOuCnpj:cpfOuCnpj, inscricaoMunicipal:inscricaoMunicipal, cep:cep, uf:uf, endereco:endereco, numeroEndereco:numeroEndereco})
-            .then( (id) => console.log(`Cliente criado com \nid: ${id}\nNome / Razão Social: ${nomeRazaoSocial}`) )
-            .catch( err => console.log(err) )
+            let query = [{nomeRazaoSocial:nomeRazaoSocial, cpfOuCnpj:cpfOuCnpj, inscricaoMunicipal:inscricaoMunicipal, cep:cep, uf:uf, endereco:endereco, numeroEndereco:numeroEndereco}]
+            Cliente.create(query)
+            .then( (id) => {
+                console.log(`Cliente criado com \nid: ${id}\nNome / Razão Social: ${nomeRazaoSocial}`)
+                setNomeRazaoSocial()
+                setCpfOuCnpj()
+                setInscricaoMunicipal()
+                setCep()
+                setUf()
+                setEndereco()
+                setNumeroEndereco()
+                setComplementoEndereco()
+                setBairro()
+                setTelefone()
+                setEmail()
+                setRazaoReduzida()
+                setDataDeCadastro()
+                setIndicacao()
+                setComissao()
+                setRespostaPost(200)
+                setMensagem("Cadastrado com sucesso!")
+                openSnackBar()
+            } )
+            .catch( err => {
+                console.log(err)
+                chamaError()
+            })
         } else{
-            console.log("faltam dados")
+            setRespostaPost(404)
+            setMensagem("Faltam dados para terminar registro")
+            openSnackBar()
         }
+    }
+
+    const chamaError = () => {
+        setRespostaPost(404)
+        setMensagem("Erro não identificado - tente novamente")
+        openSnackBar()
     }
 
     return(
@@ -78,6 +124,15 @@ export default function RegisterClient() {
                 <ButtonForm pressionado={() => confirmaDados()}/>
 
             </ScrollView>
+
+            <Snackbar
+                    visible={visible}
+                    duration={2000}
+                    onDismiss={closeSnackBar}
+                    style={respotaPost === 200 ? {backgroundColor: "rgba(71,248,30,0.8)"} : {backgroundColor: "rgba(255,82,82,0.8)"}}
+                    >
+                    <Text style={{textAlign: "center", color: "white"}}>{mensagem}</Text>
+            </Snackbar>
 
         </View>
 

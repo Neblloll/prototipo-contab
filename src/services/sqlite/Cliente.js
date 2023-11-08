@@ -87,7 +87,7 @@ const remove = (id) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "DELETE FROM clientes WHERE id=?;",
+        "DELETE FROM clientes WHERE id;",
         [id],
         (_, { rowsAffected }) => {
           resolve(rowsAffected);

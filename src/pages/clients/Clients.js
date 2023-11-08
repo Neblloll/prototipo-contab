@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-
 import Cliente from "../../services/sqlite/Cliente";
-import { Button } from "../../components/Buttons";
-import { Text } from "react-native";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
+import { ActivityIndicator, Dialog, Text, PaperProvider, List, TouchableRipple, Button  } from 'react-native-paper';
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 export default function Clients() {
 
+    const [visible, setVisible] = useState(false);
+
+    const hideDialog = () => setVisible(false);
+
     const [clientes, setClientes] = useState()
     const [clientesBuscados, setClientesBuscados] = useState(false)
+    const [clienteDeletado, setClienteDeletado] = useState()
+    const [nomeClienteDeletado, setNomeClienteDeletado] = useState()
 
     useEffect(() => {
         buscaClientes()
@@ -19,40 +24,84 @@ export default function Clients() {
         await Cliente.all()
         .then(clientes => setClientes(clientes))
         setClientesBuscados(true)
+        console.log(clientes)
     }
+
+    const deletaCliente = (cliente) => {
+        setVisible(!visible)
+        setClienteDeletado(cliente)
+        setNomeClienteDeletado(cliente.nomeRazaoSocial)
+    }
+
 
     return(
 
+    <PaperProvider>
         <View style = {styles.container} >
-
-            <ScrollView
-                
-                alignItems = 'center'
-                showsVerticalScrollIndicator
-            >
-            
-                <View style = {{flex: 1, width: '90%'}}>
-                    {clientesBuscados ? [clientes ? clientes.map((e) => (
-                        <Button name = {e.nomeRazaoSocial} description = {e.cpfOuCnpj} color={"#5ED9FC"} icon={faUser}/>
-                    )) : <Text>SEM CLIENTES CADASTRADOS</Text>] : <Text>BUSCANDO</Text>}
-
-                    {/* <Button name = {'Mercado'} description = {'Compra'} />
-                    <Button name = {'Mercado'} description = {'Compra'} />
-                    <Button name = {'Mercado'} description = {'Compra'} />
-                    <Button name = {'Mercado'} description = {'Compra'} />
-                    <Button name = {'Mercado'} description = {'Compra'} />
-                    <Button />
-                    <Button />
-                    <Button />
-                    <Button />
-                    <Button /> */}
-                   
-
-                </View>
+            <ScrollView>
+            {clientesBuscados ? [clientes[0] ? clientes.map((elem) => (
+                <TouchableRipple style={{
+                    borderColor: "#000", 
+                    borderWidth: 0.8, 
+                    margin: 5, 
+                    borderRadius: 5,
+                }}
+                >
+                    <List.Accordion
+                    titleStyle={{
+                        fontSize: 20, 
+                        color: "#000",
+                        whiteSpace: "nowrap", 
+                        textOverflow: "ellipsis", 
+                        width: "98%", 
+                        display: "block", 
+                        overflow: "hidden"
+                    }}
+                    descriptionStyle={{
+                        fontSize: 20, 
+                        color: "#000",
+                        whiteSpace: "nowrap", 
+                        textOverflow: "ellipsis", 
+                        width: "98%", 
+                        display: "block", 
+                        overflow: "hidden"
+                    }}
+                    descriptionNumberOfLines={1}
+                    description={elem.cpfOuCnpj}
+                    title={elem.nomeRazaoSocial}
+                    right={props => <View style = {{        
+                        height: 50,
+                        width: 50,
+                        borderRadius: 50,
+                        alignItems: "center",
+                        justifyContent: 'center',  
+                        backgroundColor: "#5ED9FC" 
+                    }}>
+                            <FontAwesomeIcon icon={faUser} size={30}/>
+                        </View>}
+                    >
+                        <List.Item right={props =>(<>
+                        <List.Item title={<FontAwesomeIcon icon={faPen} color="#5ED9FC"/>} onPress={() => console.log(elem)}/>
+                        <List.Item title={<FontAwesomeIcon icon={faTrash} color="red"/>} onPress={() => {deletaCliente(elem)}}/>
+                        </>
+                        )}/>
+                    
+                    </List.Accordion>
+                </TouchableRipple>)) : <View style={{display: "flex", alignItems: "center", justifyContent: "center", marginTop: 300}}><Text style={{fontSize: 30}} >SEM CLIENTES</Text></View>] : <ActivityIndicator color="#5ED9FC" size={100} style={styles.loading} animating={true} />}
 
             </ScrollView>
-
+            <Dialog visible={visible} onDismiss={hideDialog}>
+                    <Dialog.Title>Deletar</Dialog.Title>
+                    <Dialog.Content>
+                    <Text>Deseja deletar o cliente {nomeClienteDeletado} ?</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                    <Button onPress={hideDialog} textColor="blue">Cancelar</Button>
+                    <Button onPress={hideDialog} textColor="red">Deletar</Button>
+                    </Dialog.Actions>
+            </Dialog>
         </View>
+    </PaperProvider>
 
     );
 };
@@ -62,5 +111,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF',
     },
+    loading: {
+        display: "flex",
+        alignSelf: "center",
+        justifyContent: "center",
+        marginTop: 240
+    }
 
 })

@@ -23,7 +23,7 @@ export function FormRegister({ titleInput, width, height, alignVTxt, type, multi
 export function ButtonForm({ pressionado = () => {}}) {
 
     return(
-        <View>
+        <View style={{position: "relative"}}>
             <TouchableOpacity style = {styles.buttonFormContainer} onPress={pressionado}>
                 <Text style = {{color: '#FFF', fontSize: 20}}>ENVIAR</Text>
             </TouchableOpacity>

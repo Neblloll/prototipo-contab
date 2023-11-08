@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 
 import { ButtonForm, FormRegister } from "../../components/FormRegister";
+import { Snackbar } from "react-native-paper";
 
 export default function RegisterNFE() {
+
+    const [visible, setVisible] = useState(false)
+    const [mensagem, setMensagem] = useState()
+    const [respotaPost, setRespostaPost] = useState()
+
+    const openSnackBar = () => {
+        setVisible(true)
+    }
+
+    const closeSnackBar = () => {
+        setVisible(false)
+    }
+
+    const chamaError = () => {
+        setRespostaPost(404)
+        setMensagem("Erro não identificado - tente novamente")
+        openSnackBar()
+    }
+
+    //
 
     return(
 
@@ -99,9 +120,18 @@ export default function RegisterNFE() {
 
                 </View>
 
-                <ButtonForm />
+                <ButtonForm pressionado={() => chamaError()}/>
 
             </ScrollView>
+
+            <Snackbar
+                    visible={visible}
+                    duration={2000}
+                    onDismiss={closeSnackBar}
+                    style={respotaPost === 200 ? {backgroundColor: "rgba(71,248,30,0.8)"} : {backgroundColor: "rgba(255,82,82,0.8)"}}
+                    >
+                    <Text style={{textAlign: "center", color: "white"}}>{mensagem}</Text>
+            </Snackbar>
 
         </View>
 
