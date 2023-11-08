@@ -43,57 +43,39 @@ export default function RegisterClient() {
             </View>
 
             <ScrollView
+                style = {{width: '90%'}}
                 showsVerticalScrollIndicator = {false}
-                alignItems = 'center'
             >
 
-                <View style = {{flexDirection: 'column', width: '90%'}}>
+                <FormRegister titleInput = {'Nome/Razão Social'} data={nomeRazaoSocial} onClose={(e) => {setNomeRazaoSocial(e)}}/>
+                <FormRegister titleInput = {'CPF/CNPJ'} type = {'numeric'} data={cpfOuCnpj} onClose={(e) => {setCpfOuCnpj(e)}}/>
+                <FormRegister titleInput = {'Inscrição Municipal'} data={inscricaoMunicipal} onClose={(e) => {setInscricaoMunicipal(e)}}/>
 
-                    {/* {cep ? <Text>{cep}</Text> : null} */}
+                <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
 
-                    <FormRegister titleInput = {'Nome/Razão Social'} data={nomeRazaoSocial} onClose={(e) => {setNomeRazaoSocial(e)}}/>
+                    <FormRegister titleInput = {'CEP'} width={'55%'} type = {'numeric'} data={cep} onClose={(e) => {setCep(e)}}/>
+                    <FormRegister titleInput = {'UF'} width={'35%'} data={uf} onClose={(e) => {setUf(e)}}/>
 
-                    <FormRegister titleInput = {'CPF/CNPJ'} type = {'numeric'} data={cpfOuCnpj} onClose={(e) => {setCpfOuCnpj(e)}}/>
+                </View>                    
 
-                    <FormRegister titleInput = {'Inscrição Municipal'} data={inscricaoMunicipal} onClose={(e) => {setInscricaoMunicipal(e)}}/>
+                <FormRegister titleInput = {'Endereço'} data={endereco} onClose={(e) => {setEndereco(e)}}/>
 
-                    <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
+                <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
 
-                        <View style = {{width: '60%'}}>
-                            <FormRegister titleInput = {'CEP'} type = {'numeric'} data={cep} onClose={(e) => {setCep(e)}}/>
-                        </View>
-
-                        <View style = {{width: '35%'}}>
-                            <FormRegister titleInput = {'UF'} data={uf} onClose={(e) => {setUf(e)}}/>
-                        </View>
-
-                    </View>                    
-
-                    <FormRegister titleInput = {'Endereço'} data={endereco} onClose={(e) => {setEndereco(e)}}/>
-
-                    <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
-
-                        <View style = {{width: '35%'}}>
-                            <FormRegister titleInput = {'Número'} type = {'numeric'} data={numeroEndereco} onClose={(e) => {setNumeroEndereco(e)}}/>
-                        </View>
-
-                        <View style = {{width: '60%'}}>
-                            <FormRegister titleInput = {'Complemento'} data={complementoEndereco} onClose={(e) => {setComplementoEndereco(e)}}/>
-                        </View>
-
-                    </View>
-
-                    <FormRegister titleInput = {'Bairro'} data={bairro} onClose={(e) => {setBairro(e)}}/>
-                    <FormRegister titleInput = {'Telefone'} type = {'numeric'} data={telefone} onClose={(e) => {setTelefone(e)}}/>
-                    <FormRegister titleInput = {'Email'} type = {'email-address'} data={email} onClose={(e) => {setEmail(e)}}/>
-                    <FormRegister titleInput = {'Razão Reduzida'} data={razaoReduzida} onClose={(e) => {setRazaoReduzida(e)}}/>
-                    <FormRegister titleInput = {'Data de Cadastro'} type = {'numeric'} data={dataDeCadastro} onClose={(e) => {setDataDeCadastro(e)}}/>
-                    <FormRegister titleInput = {'Indicação'} data={indicaao} onClose={(e) => {setIndicacao(e)}}/>
-                    <FormRegister titleInput = {'Comissão'} type = {'numeric'} data={comissao} onClose={(e) => {setComissao(e)}}/>
-
-                    <ButtonForm pressionado={() => confirmaDados()}/>
+                    <FormRegister titleInput = {'Número'} width={'35%'} type = {'numeric'} data={numeroEndereco} onClose={(e) => {setNumeroEndereco(e)}}/>
+                    <FormRegister titleInput = {'Complemento'} width={'55%'} data={complementoEndereco} onClose={(e) => {setComplementoEndereco(e)}}/>
 
                 </View>
+
+                <FormRegister titleInput = {'Bairro'} data={bairro} onClose={(e) => {setBairro(e)}}/>
+                <FormRegister titleInput = {'Telefone'} type = {'numeric'} data={telefone} onClose={(e) => {setTelefone(e)}}/>
+                <FormRegister titleInput = {'Email'} type = {'email-address'} data={email} onClose={(e) => {setEmail(e)}}/>
+                <FormRegister titleInput = {'Razão Reduzida'} data={razaoReduzida} onClose={(e) => {setRazaoReduzida(e)}}/>
+                <FormRegister titleInput = {'Data de Cadastro'} type = {'numeric'} data={dataDeCadastro} onClose={(e) => {setDataDeCadastro(e)}}/>
+                <FormRegister titleInput = {'Indicação'} data={indicaao} onClose={(e) => {setIndicacao(e)}}/>
+                <FormRegister titleInput = {'Comissão'} type = {'numeric'} data={comissao} onClose={(e) => {setComissao(e)}}/>
+
+                <ButtonForm pressionado={() => confirmaDados()}/>
 
             </ScrollView>
 
@@ -105,6 +87,7 @@ export default function RegisterClient() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'center',
         backgroundColor: '#FFF',
     },
 

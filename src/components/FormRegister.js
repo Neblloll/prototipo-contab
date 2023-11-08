@@ -1,18 +1,21 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 
-export function FormRegister({ titleInput, type, data, onClose = () =>{}}) {
+export function FormRegister({ titleInput, width, height, alignVTxt, type, multiline, data, onClose = () =>{}}) {
 
     return(
-        <View style = {styles.containerInput}>
+        <View style = {[styles.containerInput, {width: width || '100%'}]}>
+
             <Text style = {styles.titleInput}>{titleInput}</Text>
             <TextInput
-                style = {styles.contentInput}
+                style = {[styles.contentInput, {height: height || 40, textAlignVertical: alignVTxt || 'center', paddingVertical: alignVTxt ? 15 : 0}]}
                 keyboardType = {type || 'default'}
                 autoCapitalize = "words"
+                multiline = {multiline || false}
                 value={data}
                 onChangeText={onClose}
             />
+            
         </View>
     );
 };
@@ -30,9 +33,6 @@ export function ButtonForm({ pressionado = () => {}}) {
 
 const styles = StyleSheet.create({
     containerInput: {
-        minWidth: '100%',
-        flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
         marginTop: 15,
         marginBottom: 15,
@@ -45,9 +45,8 @@ const styles = StyleSheet.create({
     },
 
     contentInput: {
-        height: 40,
         width: '100%',
-        fontSize: 17,
+        fontSize: 18,
         marginTop: 15,
         paddingHorizontal: 15,
         borderRadius: 5,

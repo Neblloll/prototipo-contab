@@ -16,61 +16,90 @@ export default function RegisterNFE() {
             </View>
 
             <ScrollView
+                style = {{width: '90%'}}
                 showsVerticalScrollIndicator = {false}
-                alignItems = 'center'
             >
 
-                <View style = {{flexDirection: 'column', width: '90%'}}>
+                <View style = {styles.formHorizontal}>
 
-                    <FormRegister titleInput = {'Número'} />
+                    <FormRegister titleInput = {'Número'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Data de emissão'} width={'45%'} type={'numeric'} />
+                    
+                </View>
 
-                    <FormRegister titleInput = {'Data de emissão'} />
+                <View style = {styles.formHorizontal}>
 
-                    <FormRegister titleInput = {'Cod. Verificação'} />
-
-                    <FormRegister titleInput = {'Iss retido'} />
-
-                    <FormRegister titleInput = {'Competência'} />
-
-                    <FormRegister titleInput = {'Valor liquido'} />
-
-                    <FormRegister titleInput = {'Base de cálculo'} />
-
-                    <FormRegister titleInput = {'Valor'} />
-
-                    <FormRegister titleInput = {'Cod. tributação municipal'} />
-
-                    <FormRegister titleInput = {'Desconto'} />
-
-                    <FormRegister titleInput = {'Discriminação dos serviços'} />
-
-                    <FormRegister titleInput = {'CPF/CNPJ'} />
-
-                    <FormRegister titleInput = {'Razão Reduzida'} />
-
-                    <FormRegister titleInput = {'Bairro'} />
-
-                    <FormRegister titleInput = {'UF'} />
-
-                    <FormRegister titleInput = {'Pagamento'} />
-
-                    <FormRegister titleInput = {'Vencimento'} />
-
-                    <FormRegister titleInput = {'Juros'} />
-
-                    <FormRegister titleInput = {'Valor pago'} />
-
-                    <FormRegister titleInput = {'Importada em'} />
-
-                    <FormRegister titleInput = {'Imposto Retido'} />
-
-                    <FormRegister titleInput = {'Juros/Multa Abonada'} />
-
-                    <FormRegister titleInput = {'Mês/Ano'} />
-
-                    <ButtonForm />
+                    <FormRegister titleInput = {'Cod. Verificação'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Iss retido'} width={'45%'} type={'numeric'} />
 
                 </View>
+
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Competência'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Valor liquido'} width={'45%'} type={'numeric'} />
+
+                </View>
+
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Base de cálculo'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Valor'} width={'45%'} type={'numeric'} />
+
+                </View>
+
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Cod. tributação'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Desconto'} width={'45%'} type={'numeric'} />
+
+                </View>
+
+                <FormRegister titleInput = {'Discriminação dos serviços'} height={200} alignVTxt={'top'} multiline={true} />
+
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'CPF/CNPJ'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Razão Reduzida'} width={'45%'} type={'numeric'} />
+
+                </View>
+
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Bairro'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'UF'} width={'45%'} type={'numeric'} />
+
+                </View>
+
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Pagamento'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Vencimento'} width={'45%'} type={'numeric'} />
+
+                </View>
+                
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Juros'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Valor pago'} width={'45%'} type={'numeric'} />
+
+                </View>
+
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Importada em'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Imposto Retido'} width={'45%'} type={'numeric'} />
+
+                </View>
+                
+                <View style = {styles.formHorizontal}>
+
+                    <FormRegister titleInput = {'Juros Abonada'} width={'45%'} type={'numeric'} />
+                    <FormRegister titleInput = {'Mês/Ano'} width={'45%'} type={'numeric'} />
+
+                </View>
+
+                <ButtonForm />
 
             </ScrollView>
 
@@ -82,6 +111,7 @@ export default function RegisterNFE() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'center',
         backgroundColor: '#FFF',
     },
 
@@ -105,5 +135,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
+    },
+
+    formHorizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 })
