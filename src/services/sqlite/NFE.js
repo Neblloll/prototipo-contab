@@ -2,7 +2,7 @@ import db from "./SQLiteDatabse";
 
 db.transaction((tx) => {
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS notasFiscais (id INTEGER PRIMARY KEY AUTOINCREMENT, numero TEXT, dataDeEmissao TEXT, codVerfificacao TEXT, issRetido DOUBLE, competencia TEXT, valorLiquido DOUBLE, baseDeCalculo DOUBLE, valor DOUBLE, codTributacaoMunicipal TEXT, desconto DOUBLE, discriminacaoDosServicos TEXT, cpfCnpj TEXT, razaoReduzida TEXT, bairro TEXT, uf TEXT, pagamento DOUBLE, vencimento TEXT, juros DOUBLE, valorPago DOUBLE, dataImportacao TEXT, impostoRetido DOUBLE, jurosMultaAbandono TEXT, mesAno TEXT, concluded TEXT);"
+    "CREATE TABLE IF NOT EXISTS notasFiscais (id INTEGER PRIMARY KEY AUTOINCREMENT, numero TEXT NOT NULL, dataDeEmissao TEXT NOT NULL, codVerfificacao TEXT NOT NULL, issRetido DOUBLE  NOT NULL, competencia TEXT NOT NULL, valorLiquido DOUBLE NOT NULL, baseDeCalculo DOUBLE NOT NULL, valor DOUBLE NOT NULL, codTributacaoMunicipal TEXT NOT NULL, desconto DOUBLE NOT NULL, discriminacaoDosServicos TEXT NOT NULL, cpfCnpj TEXT NOT NULL, razaoReduzida TEXT NOT NULL, bairro TEXT NOT NULL, uf TEXT NOT NULL, pagamento DOUBLE NOT NULL, vencimento TEXT NOT NULL, juros DOUBLE NOT NULL, valorPago DOUBLE NOT NULL, dataImportacao TEXT NOT NULL, impostoRetido DOUBLE NOT NULL, jurosMultaAbandono TEXT NOT NULL, mesAno TEXT NOT NULL, concluded TEXT);"
   );
 });
 
@@ -27,7 +27,7 @@ const update = (id, obj) => {
     db.transaction((tx) => {
       tx.executeSql(
         "UPDATE notasFiscais SET numero, dataDeEmissao=?, codVerfificacao=?, issRetido=?, competencia=?, valorLiquido=?, baseDeCalculo=?, valor=?, codTributacaoMunicipal=?, desconto=?, discriminacaoDosServicos=?, cpfCnpj=?, razaoReduzida=?, bairro=?, uf=?, pagamento=?, vencimento=?, juros=?, valorPago=?, dataImportacao=?, impostoRetido=?, jurosMultaAbandono=?, mesAno=?, concluded=? WHERE id=?;",
-        [obj.nomeRazaoSocial, obj.cpfOuCnpj, obj.inscricaoMunicipal, obj.cep, obj.uf, obj.endereco, obj.numeroEndereco, id],
+        [obj.numero, obj.dataDeEmissao, obj.codVerfificacao, obj.issRetido, obj.competencia, obj.valorLiquido, obj.baseDeCalculo, obj.valor, obj.codTributacaoMunicipal , obj.desconto , obj.discriminacaoDosServicos , obj.cpfCnpj , obj.razaoReduzida , obj.bairro , obj.uf , obj.pagamento , obj.vencimento , obj.juros , obj.valorPago , obj.dataImportacao, obj.impostoRetido, obj.jurosMultaAbandono, obj.mesAno, obj.concluded, id],
         (_, { rowsAffected }) => {
           if (rowsAffected > 0) resolve(rowsAffected);
           else reject("Error updating obj: id=" + id);
@@ -75,6 +75,19 @@ const findByConcluded = () => {
     db.transaction((tx) => {
       tx.executeSql(
         "SELECT * FROM notasFiscais WHERE concluded=true;",
+        [],
+        (_, { rows }) => resolve(rows._array),
+        (_, error) => reject(error) 
+      );
+    });
+  });
+};
+
+const findByNotConcluded = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * FROM notasFiscais WHERE concluded=false;",
         [],
         (_, { rows }) => resolve(rows._array),
         (_, error) => reject(error) 
@@ -142,5 +155,6 @@ export default {
   all,
   remove,
   findByConcluded,
+  findByNotConcluded,
   deleteTable
 };

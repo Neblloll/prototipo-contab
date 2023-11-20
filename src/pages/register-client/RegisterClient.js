@@ -5,7 +5,7 @@ import Cliente from "../../services/sqlite/Cliente";
 import {FormRegister, ButtonForm} from "../../components/FormRegister";
 import { Snackbar, TextInput } from "react-native-paper";
 
-export default function RegisterClient({ onClose = () => {}}) {
+export default function RegisterClient({ onClose = () => {} }) {
 
     const [visible, setVisible] = useState(false)
     const [mensagem, setMensagem] = useState()

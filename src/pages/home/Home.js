@@ -4,16 +4,16 @@ import { View, StyleSheet, ScrollView } from "react-native";
 // import { Button } from "../../components/Buttons";
 import { faClock, faPen, faTrash, faUser, faX } from "@fortawesome/free-solid-svg-icons";
 import { Avatar, Button, Card, Dialog, Portal, PaperProvider, Text, TouchableRipple, List, ActivityIndicator } from 'react-native-paper';
-import NFE from "../../services/sqlite/NFE";
+import NotaFiscal from "../../services/sqlite/NFE";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-export default function Home() {
+export default function Home({ onClose = () => {} }) {
 
     const [visible, setVisible] = useState(false);
     
     //
     const [notasFiscais, setNotasFiscais] = useState()
-    const [notasFiscaisBuscadas, setNotasFiscaisBuscadas] = useState(true)
+    const [notasFiscaisBuscadas, setNotasFiscaisBuscadas] = useState(false)
     const [notaFiscalDeletada, setNotasFiscalDeletada] = useState()
     const [nomeNotaFiscalDeletada, setNomeNotaFiscalDeletada] = useState()
 
@@ -26,21 +26,27 @@ export default function Home() {
     }, [])
 
     const buscaNotasFiscais = async () => {
-        await NFE.all()
-        .then(notas => {
-            console.log(notas)
-            setNotasFiscais(notas)
-        })
+        await NotaFiscal.findByNotConcluded()
+        .then(notas => setNotasFiscais(notas))
         setNotasFiscaisBuscadas(true)
-        console.log(notasFiscais)
+        // console.log(notasFiscais)
     }
 
-    const deletaCliente = (nota) => {
+    const deletaNotaFiscal = (nota) => {
         setVisible(!visible)
         setNotasFiscalDeletada(nota)
         setNomeNotaFiscalDeletada(nota.numero)
     }
-  
+
+    const deletadorNotaFiscal = () => {
+        NotaFiscal.remove(notaFiscalDeletada.id)
+        .then(() => {
+            console.log("deletado com sucesso")
+            hideDialog()
+            buscaNotasFiscais()
+        })
+        .catch((err) => console.log(err))
+    }
 
     return(
 
@@ -75,8 +81,8 @@ export default function Home() {
                         overflow: "hidden"
                     }}
                     descriptionNumberOfLines={1}
-                    description={elem.numero}
-                    title={elem.id}
+                    description={elem.mesAno}
+                    title={elem.numero}
                     right={props => <View style = {{        
                         height: 50,
                         width: 50,
@@ -89,8 +95,8 @@ export default function Home() {
                         </View>}
                     >
                         <List.Item right={props =>(<>
-                        <List.Item title={<FontAwesomeIcon icon={faPen} color="#5ED9FC"/>} onPress={() => console.log(elem)}/>
-                        <List.Item title={<FontAwesomeIcon icon={faTrash} color="red"/>} onPress={() => {deletaCliente(elem)}}/>
+                        <List.Item title={<FontAwesomeIcon icon={faPen} color="#5ED9FC"/>} onPress={() => onClose(elem)}/>
+                        <List.Item title={<FontAwesomeIcon icon={faTrash} color="red"/>} onPress={() => {deletaNotaFiscal(elem)}}/>
                         </>
                         )}/>
                     
@@ -105,7 +111,7 @@ export default function Home() {
                     </Dialog.Content>
                     <Dialog.Actions>
                     <Button onPress={hideDialog} textColor="blue">Cancelar</Button>
-                    <Button onPress={hideDialog} textColor="red">Deletar</Button>
+                    <Button onPress={deletadorNotaFiscal} textColor="red">Deletar</Button>
                     </Dialog.Actions>
             </Dialog>
         </View>

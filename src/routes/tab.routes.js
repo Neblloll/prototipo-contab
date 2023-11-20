@@ -11,12 +11,16 @@ import Clients from "../pages/clients/Clients";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFile, faFileCircleCheck, faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { CommonActions, useNavigation } from '@react-navigation/native'
+
 
 library.add(faFileCirclePlus, faFileCircleCheck)
 
 const Tab = createBottomTabNavigator();
 
-export default function TabRoutes() {
+export default function TabRoutes({ navegador = () => {} }) {
+
+    // const navigation = useNavigation()
 
     const [atualizaNFE, setAtualizaNFE] = useState()
     const [atualizaCliente, setAtualizaCliente] = useState()
@@ -41,6 +45,11 @@ export default function TabRoutes() {
     
         return () => backHandler.remove();
     }, []);
+
+    const chamaEditorDeNFE = (e) => {
+        navegador('register-nfe')
+        
+    }
 
     return (
 
@@ -95,11 +104,7 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'register-nfe'
-                component ={() => <RegisterNFE onClose={(e) => {
-                    if(e){
-                        setAtualizaNFE(true)
-                    }
-                }}/>}
+                component ={() => <RegisterNFE />}
                 options = {{
                     headerTitle: 'CADASTRO NFE',
                     tabBarIcon: ({ size, color, focused }) => (
@@ -118,7 +123,11 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'home'
-                component ={Home}
+                component ={() => <Home onClose={(e) => {
+                    if(e){
+                        chamaEditorDeNFE(e)                
+                    }
+                }}/>}
                 options = {{
                     headerTitle: 'MENU',
                     tabBarIcon: ({ size, color, focused }) => (
