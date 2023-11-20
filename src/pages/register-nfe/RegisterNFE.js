@@ -4,9 +4,12 @@ import { View, StyleSheet, ScrollView, Text } from "react-native";
 import { ButtonForm, FormRegister } from "../../components/FormRegister";
 import { Button, Snackbar } from "react-native-paper";
 import NotaFiscal from "../../services/sqlite/NFE";
+import { useRoute } from '@react-navigation/native';
 
 
-export default function RegisterNFE(props, { route, onClose = () => {} }) {
+export default function RegisterNFE({ onClose = () => {} }) {
+
+    const route = useRoute();
 
     const [visible, setVisible] = useState(false)
     const [mensagem, setMensagem] = useState()
@@ -84,6 +87,7 @@ export default function RegisterNFE(props, { route, onClose = () => {} }) {
         }
     }
 
+    const [dadosEditar, setDadosEditar] = useState(route.params ? route.params.dados : null)
 
     return(
 
@@ -95,7 +99,7 @@ export default function RegisterNFE(props, { route, onClose = () => {} }) {
                 <View style = {styles.titleTracer} />
             </View>
 
-            <Text>{route ? route[0] : "nada"}</Text>
+            <Text>{dadosEditar ? dadosEditar.id : "nada"}</Text>
 
             <ScrollView
                 style = {{width: '90%'}}

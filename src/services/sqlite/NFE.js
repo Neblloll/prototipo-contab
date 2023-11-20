@@ -2,7 +2,7 @@ import db from "./SQLiteDatabse";
 
 db.transaction((tx) => {
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS notasFiscais (id INTEGER PRIMARY KEY AUTOINCREMENT, numero TEXT NOT NULL, dataDeEmissao TEXT NOT NULL, codVerfificacao TEXT NOT NULL, issRetido DOUBLE  NOT NULL, competencia TEXT NOT NULL, valorLiquido DOUBLE NOT NULL, baseDeCalculo DOUBLE NOT NULL, valor DOUBLE NOT NULL, codTributacaoMunicipal TEXT NOT NULL, desconto DOUBLE NOT NULL, discriminacaoDosServicos TEXT NOT NULL, cpfCnpj TEXT NOT NULL, razaoReduzida TEXT NOT NULL, bairro TEXT NOT NULL, uf TEXT NOT NULL, pagamento DOUBLE NOT NULL, vencimento TEXT NOT NULL, juros DOUBLE NOT NULL, valorPago DOUBLE NOT NULL, dataImportacao TEXT NOT NULL, impostoRetido DOUBLE NOT NULL, jurosMultaAbandono TEXT NOT NULL, mesAno TEXT NOT NULL, concluded TEXT);"
+    "CREATE TABLE IF NOT EXISTS notasFiscais (id INTEGER PRIMARY KEY AUTOINCREMENT, numero TEXT NOT NULL, dataDeEmissao TEXT NOT NULL, codVerficacao TEXT NOT NULL, issRetido DOUBLE  NOT NULL, competencia TEXT NOT NULL, valorLiquido DOUBLE NOT NULL, baseDeCalculo DOUBLE NOT NULL, valor DOUBLE NOT NULL, codTributacaoMunicipal TEXT NOT NULL, desconto DOUBLE NOT NULL, discriminacaoDosServicos TEXT NOT NULL, cpfCnpj TEXT NOT NULL, razaoReduzida TEXT NOT NULL, bairro TEXT NOT NULL, uf TEXT NOT NULL, pagamento DOUBLE NOT NULL, vencimento TEXT NOT NULL, juros DOUBLE NOT NULL, valorPago DOUBLE NOT NULL, dataImportacao TEXT NOT NULL, impostoRetido DOUBLE NOT NULL, jurosMultaAbandono TEXT NOT NULL, mesAno TEXT NOT NULL, concluded TEXT);"
   );
 });
 
@@ -10,8 +10,8 @@ const create = (obj) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO notasFiscais (numero, dataDeEmissao, codVerfificacao, issRetido, competencia, valorLiquido, baseDeCalculo, valor, codTributacaoMunicipal, desconto, discriminacaoDosServicos, cpfCnpj, razaoReduzida, bairro, uf, pagamento, vencimento, juros, valorPago, dataImportacao, impostoRetido, jurosMultaAbandono, mesAno, concluded) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-        [obj.numero, obj.dataDeEmissao, obj.codVerfificacao, obj.issRetido, obj.competencia, obj.valorLiquido, obj.baseDeCalculo, obj.valor, obj.codTributacaoMunicipal , obj.desconto , obj.discriminacaoDosServicos , obj.cpfCnpj , obj.razaoReduzida , obj.bairro , obj.uf , obj.pagamento , obj.vencimento , obj.juros , obj.valorPago , obj.dataImportacao, obj.impostoRetido, obj.jurosMultaAbandono, obj.mesAno, obj.concluded],
+        "INSERT INTO notasFiscais (numero, dataDeEmissao, codVerficacao, issRetido, competencia, valorLiquido, baseDeCalculo, valor, codTributacaoMunicipal, desconto, discriminacaoDosServicos, cpfCnpj, razaoReduzida, bairro, uf, pagamento, vencimento, juros, valorPago, dataImportacao, impostoRetido, jurosMultaAbandono, mesAno, concluded) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        [obj.numero, obj.dataDeEmissao, obj.codVerficacao, obj.issRetido, obj.competencia, obj.valorLiquido, obj.baseDeCalculo, obj.valor, obj.codTributacaoMunicipal , obj.desconto , obj.discriminacaoDosServicos , obj.cpfCnpj , obj.razaoReduzida , obj.bairro , obj.uf , obj.pagamento , obj.vencimento , obj.juros , obj.valorPago , obj.dataImportacao, obj.impostoRetido, obj.jurosMultaAbandono, obj.mesAno, obj.concluded],
         (_, { rowsAffected, insertId }) => {
           if (rowsAffected > 0) resolve(insertId);
           else reject("Error inserting obj: " + JSON.stringify(obj));
@@ -26,8 +26,8 @@ const update = (id, obj) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "UPDATE notasFiscais SET numero, dataDeEmissao=?, codVerfificacao=?, issRetido=?, competencia=?, valorLiquido=?, baseDeCalculo=?, valor=?, codTributacaoMunicipal=?, desconto=?, discriminacaoDosServicos=?, cpfCnpj=?, razaoReduzida=?, bairro=?, uf=?, pagamento=?, vencimento=?, juros=?, valorPago=?, dataImportacao=?, impostoRetido=?, jurosMultaAbandono=?, mesAno=?, concluded=? WHERE id=?;",
-        [obj.numero, obj.dataDeEmissao, obj.codVerfificacao, obj.issRetido, obj.competencia, obj.valorLiquido, obj.baseDeCalculo, obj.valor, obj.codTributacaoMunicipal , obj.desconto , obj.discriminacaoDosServicos , obj.cpfCnpj , obj.razaoReduzida , obj.bairro , obj.uf , obj.pagamento , obj.vencimento , obj.juros , obj.valorPago , obj.dataImportacao, obj.impostoRetido, obj.jurosMultaAbandono, obj.mesAno, obj.concluded, id],
+        "UPDATE notasFiscais SET numero, dataDeEmissao=?, codVerficacao=?, issRetido=?, competencia=?, valorLiquido=?, baseDeCalculo=?, valor=?, codTributacaoMunicipal=?, desconto=?, discriminacaoDosServicos=?, cpfCnpj=?, razaoReduzida=?, bairro=?, uf=?, pagamento=?, vencimento=?, juros=?, valorPago=?, dataImportacao=?, impostoRetido=?, jurosMultaAbandono=?, mesAno=?, concluded=? WHERE id=?;",
+        [obj.numero, obj.dataDeEmissao, obj.codVerficacao, obj.issRetido, obj.competencia, obj.valorLiquido, obj.baseDeCalculo, obj.valor, obj.codTributacaoMunicipal , obj.desconto , obj.discriminacaoDosServicos , obj.cpfCnpj , obj.razaoReduzida , obj.bairro , obj.uf , obj.pagamento , obj.vencimento , obj.juros , obj.valorPago , obj.dataImportacao, obj.impostoRetido, obj.jurosMultaAbandono, obj.mesAno, obj.concluded, id],
         (_, { rowsAffected }) => {
           if (rowsAffected > 0) resolve(rowsAffected);
           else reject("Error updating obj: id=" + id);
