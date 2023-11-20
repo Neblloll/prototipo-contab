@@ -7,11 +7,7 @@ import { useState } from "react";
 
 const Stack = createNativeStackNavigator();
 
-export default function StackRoutes({ navigation }) {
-
-    const [nomeRota, setNomeRota] = useState()
-
-    const navegaAdmin = navigation => navigation.navigate(nomeRota);
+export default function StackRoutes() {
 
     return(
         
@@ -33,9 +29,7 @@ export default function StackRoutes({ navigation }) {
 
             <Stack.Screen 
                 name = 'TabRoutes'
-                component = {() => < TabRoutes navegador={(e) => {
-                    setNomeRota(e)
-                    navegaAdmin()}}/>}
+                component = {TabRoutes}
             />
 
         </Stack.Navigator>

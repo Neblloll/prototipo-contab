@@ -18,9 +18,9 @@ library.add(faFileCirclePlus, faFileCircleCheck)
 
 const Tab = createBottomTabNavigator();
 
-export default function TabRoutes({ navegador = () => {} }) {
+export default function TabRoutes() {
 
-    // const navigation = useNavigation()
+    const navigation = useNavigation()
 
     const [atualizaNFE, setAtualizaNFE] = useState()
     const [atualizaCliente, setAtualizaCliente] = useState()
@@ -47,8 +47,8 @@ export default function TabRoutes({ navegador = () => {} }) {
     }, []);
 
     const chamaEditorDeNFE = (e) => {
-        navegador('register-nfe')
-        
+        navigation.navigate('register-nfe', {dados: e})
+
     }
 
     return (
