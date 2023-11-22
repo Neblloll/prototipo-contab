@@ -94,7 +94,7 @@ export default function Home({ onClose = () => {} }) {
                             <FontAwesomeIcon icon={faUser} size={30}/>
                         </View>}
                     >
-                        <List.Item right={props =>(<>
+                        <List.Item title={elem.discriminacaoDosServicos} right={props =>(<>
                         <List.Item title={<FontAwesomeIcon icon={faPen} color="#5ED9FC"/>} onPress={() => onClose(elem)}/>
                         <List.Item title={<FontAwesomeIcon icon={faTrash} color="red"/>} onPress={() => {deletaNotaFiscal(elem)}}/>
                         </>

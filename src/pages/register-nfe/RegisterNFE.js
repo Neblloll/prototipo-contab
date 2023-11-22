@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, Text } from "react-native";
+import { View, StyleSheet, ScrollView, Text, ActivityIndicator } from "react-native";
 
 import { ButtonForm, FormRegister } from "../../components/FormRegister";
 import { Button, Snackbar } from "react-native-paper";
 import NotaFiscal from "../../services/sqlite/NFE";
 import { useRoute } from '@react-navigation/native';
+import { Checkbox } from 'react-native-paper';
+
 
 
 export default function RegisterNFE({ onClose = () => {} }) {
@@ -14,6 +16,8 @@ export default function RegisterNFE({ onClose = () => {} }) {
     const [visible, setVisible] = useState(false)
     const [mensagem, setMensagem] = useState()
     const [respotaPost, setRespostaPost] = useState()
+    const [checked, setChecked] = useState(false)
+    
 
     const openSnackBar = () => {
         setVisible(true)
@@ -53,41 +57,105 @@ export default function RegisterNFE({ onClose = () => {} }) {
     const [impostoRetido, setImpostoRetido] = useState()
     const [jurosAbonado, setJurosAbonado] = useState()
     const [mesAno, setMesAno] = useState()
-    const [concluded, setConcluded] = useState()
+    const [concluded, setConcluded] = useState(false)
+
+    const limparDados = () =>{
+        setNumero('')
+        setDataDeEmissao('')
+        setCodVerificacao('')
+        setIssRetido('')
+        setCompetencia('')
+        setValorLiquido('')
+        setBaseDeCalculo('')
+        setValor('')
+        setDesconto('')
+        setCodTributacaoMunicipal('')
+        setDiscriminacaoDosServicos('')
+        setCpfOuCnpj('')
+        setRazaoReduzida('')
+        setBairro('')
+        setUf('')
+        setPagamento('')
+        setVencimento('')
+        setJuros('')
+        setValorPago('')
+        setDataImpotacao('')
+        setImpostoRetido('')
+        setJurosAbonado('')
+        setMesAno('')
+    }
 
     const confirmaDados = () => {
-        if(numero){
-            NotaFiscal.create({numero: numero, dataDeEmissao: dataDeEmissao, codVerfificacao: codVerfificacao, issRetido: issRetido, competencia: competencia, valorLiquido: valorLiquido, baseDeCalculo: baseDeCalculo, valor: valor, codTributacaoMunicipal: codTributacaoMunicipal, desconto: desconto, discriminacaoDosServicoss: discriminacaoDosServicos, cpfCnpj: cpfOuCnpj, razaoReduzida: razaoReduzida, bairro: bairro, uf: uf, pagamento: pagamento, vencimento: vencimento, juros: juros, valorPago: valorPago, dataImportacao: dataImportacao, impostoRetido: impostoRetido, jurosMultaAbandono: jurosAbonado, mesAno: mesAno, concluded: false})
+
+        // NotaFiscal.findByNotConcluded()
+        // .then((e) => {
+        //     console.log(e)
+        // })
+
+        // NotaFiscal.deleteTable()
+
+        let criado = true
+        
+        if(numero && !dadosEditar){
+            NotaFiscal.create({numero: numero, dataDeEmissao: dataDeEmissao, codVerficacao: codVerfificacao, issRetido: issRetido, competencia: competencia, valorLiquido: valorLiquido, baseDeCalculo: baseDeCalculo, valor: valor, codTributacaoMunicipal: codTributacaoMunicipal, desconto: desconto, discriminacaoDosServicos: discriminacaoDosServicos, cpfCnpj: cpfOuCnpj, razaoReduzida: razaoReduzida, bairro: bairro, uf: uf, pagamento: pagamento, vencimento: vencimento, juros: juros, valorPago: valorPago, dataImportacao: dataImportacao, impostoRetido: impostoRetido, jurosMultaAbandono: jurosAbonado, mesAno: mesAno, concluded: concluded})
             .then((id, numero) => {
                 console.log(`\n\n\n\nNota fiscal criada com id: ${id} e numero: ${numero}\n\n\n\n`)
-                setNumero('')
-                setDataDeEmissao('')
-                setCodVerificacao('')
-                setIssRetido('')
-                setCompetencia('')
-                setValorLiquido('')
-                setBaseDeCalculo('')
-                setValor('')
-                setCodTributacaoMunicipal('')
-                setDiscriminacaoDosServicos('')
-                setCpfOuCnpj('')
-                setRazaoReduzida('')
-                setBairro('')
-                setUf('')
-                setPagamento('')
-                setVencimento('')
-                setJuros('')
-                setValorPago('')
-                setDataImpotacao('')
-                setImpostoRetido('')
-                setJurosAbonado('')
-                setMesAno('')
+                criado = true
             })
             .catch((err) => console.log(`\n\n\n\n${err}\n\n\n\n`))
+        } else if(numero && dadosEditar){
+            NotaFiscal.update(dadosEditar.id, {numero: numero, dataDeEmissao: dataDeEmissao, codVerficacao: codVerfificacao, issRetido: issRetido, competencia: competencia, valorLiquido: valorLiquido, baseDeCalculo: baseDeCalculo, valor: valor, codTributacaoMunicipal: codTributacaoMunicipal, desconto: desconto, discriminacaoDosServicos: discriminacaoDosServicos, cpfCnpj: cpfOuCnpj, razaoReduzida: razaoReduzida, bairro: bairro, uf: uf, pagamento: pagamento, vencimento: vencimento, juros: juros, valorPago: valorPago, dataImportacao: dataImportacao, impostoRetido: impostoRetido, jurosMultaAbandono: jurosAbonado, mesAno: mesAno, concluded: concluded})
+            .then((id, numero) => {
+                console.log(`\n\n\n\nNota fiscal editada com id: ${id} e numero: ${numero}\n\n\n\n`)
+                criado = true
+            })
+            .catch((err) => console.log(`\n\n\n\n${err}\n\n\n\n`))
+        }
+        if(criado === true){
+            setDadosEditar(null)
+            limparDados()
+            onClose(concluded)
+            route.params.dados = null
         }
     }
 
     const [dadosEditar, setDadosEditar] = useState(route.params ? route.params.dados : null)
+
+    useEffect(() => {
+        preencheDados()
+    }, [dadosEditar])
+
+    const [conferirDados, setConferirDados] = useState(false)
+
+    const preencheDados = () => {
+        if(dadosEditar){
+            setNumero(dadosEditar.numero)
+            setDataDeEmissao(dadosEditar.dataDeEmissao)
+            setCodVerificacao(dadosEditar.codVerficacao)
+            setIssRetido(dadosEditar.issRetido)
+            setCompetencia(dadosEditar.competencia)
+            setValorLiquido(dadosEditar.valorLiquido)
+            setBaseDeCalculo(dadosEditar.baseDeCalculo)
+            setValor(dadosEditar.valor)
+            setCodTributacaoMunicipal(dadosEditar.codTributacaoMunicipal)
+            setDesconto(dadosEditar.desconto)
+            setDiscriminacaoDosServicos(dadosEditar.discriminacaoDosServicos)
+            setCpfOuCnpj(dadosEditar.cpfCnpj)
+            setRazaoReduzida(dadosEditar.razaoReduzida)
+            setBairro(dadosEditar.bairro)
+            setUf(dadosEditar.uf)
+            setPagamento(dadosEditar.pagamento)
+            setVencimento(dadosEditar.vencimento)
+            setJuros(dadosEditar.juros)
+            setValorPago(dadosEditar.valorPago)
+            setDataImpotacao(dadosEditar.dataImportacao)
+            setImpostoRetido(dadosEditar.impostoRetido)
+            setJurosAbonado(dadosEditar.jurosMultaAbandono)
+            setMesAno(dadosEditar.mesAno)
+            setConcluded(dadosEditar.concluded)
+        }
+        setConferirDados(true)
+    }
 
     return(
 
@@ -99,9 +167,7 @@ export default function RegisterNFE({ onClose = () => {} }) {
                 <View style = {styles.titleTracer} />
             </View>
 
-            <Text>{dadosEditar ? dadosEditar.id : "nada"}</Text>
-
-            <ScrollView
+            {conferirDados ? <ScrollView
                 style = {{width: '90%'}}
                 showsVerticalScrollIndicator = {false}
             >
@@ -120,10 +186,10 @@ export default function RegisterNFE({ onClose = () => {} }) {
 
                     <FormRegister titleInput = {'Cod. Verificação'} width={'45%'} type={'numeric'} onClose={(e) => {
                         setCodVerificacao(e)
-                    }} data={codVerfificacao ? codVerfificacao : null}/>
+                    }} data={codVerfificacao}/>
                     <FormRegister titleInput = {'Iss retido'} width={'45%'} type={'numeric'} onClose={(e) => { 
                         setIssRetido(e)
-                    }} data={issRetido ? issRetido : null}/>
+                    }} data={issRetido}/>
 
                 </View>
 
@@ -230,9 +296,21 @@ export default function RegisterNFE({ onClose = () => {} }) {
 
                 </View>
 
+                <Checkbox.Item
+                status={checked ? 'checked' : 'unchecked'}
+                onPress={() => {
+                    console.log(concluded)
+                    console.log(checked)
+                    setChecked(!checked);
+                    setConcluded(checked)
+                }}
+                label="Conclued"
+                />
+
+
                 <ButtonForm pressionado={() => confirmaDados()}/>
 
-            </ScrollView>
+            </ScrollView> : <ActivityIndicator color="#5ED9FC" size={100} style={styles.loading} animating={true} />}
 
             <Snackbar
                     visible={visible}
@@ -281,4 +359,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    loading: {
+        display: "flex",
+        alignSelf: "center",
+        justifyContent: "center",
+        marginTop: 240
+    }
 })

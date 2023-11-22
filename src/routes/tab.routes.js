@@ -50,6 +50,12 @@ export default function TabRoutes() {
         navigation.navigate('register-nfe', {dados: e})
 
     }
+    const enviaParaNotasNotConclued = () => {
+        navigation.navigate('home')
+    }
+    const enviaParaNotasConclued = () => {
+        navigation.navigate('concluded')
+    }
 
     return (
 
@@ -104,7 +110,14 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'register-nfe'
-                component ={() => <RegisterNFE />}
+                component ={() => <RegisterNFE onClose={(e) => {
+                    console.log(e)
+                    if(e === 1 || e === "1" || e === true){
+                        enviaParaNotasConclued()                
+                    } else{
+                        enviaParaNotasNotConclued() 
+                    }
+                }}/>}
                 options = {{
                     headerTitle: 'CADASTRO NFE',
                     tabBarIcon: ({ size, color, focused }) => (
