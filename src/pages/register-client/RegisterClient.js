@@ -1,11 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet,Text, ScrollView } from "react-native";
 import Cliente from "../../services/sqlite/Cliente";
 
 import {FormRegister, ButtonForm} from "../../components/FormRegister";
-import { Snackbar, TextInput } from "react-native-paper";
+import { Snackbar, ActivityIndicator } from "react-native-paper";
+import { useRoute } from '@react-navigation/native';
+import Clients from "../clients/Clients";
 
 export default function RegisterClient({ onClose = () => {} }) {
+
+    const route = useRoute();
+
+    const [dadosEditar, setDadosEditar] = useState(route.params ? route.params.dados : null)
+
+    useEffect(() => {
+        preencheDados()
+    }, [])
+
+    const [conferirDados, setConferirDados] = useState(false)
+
+    const preencheDados = () => {
+        if(dadosEditar){
+            setNomeRazaoSocial(dadosEditar.nomeRazaoSocial)
+            setCpfOuCnpj(dadosEditar.cpfOuCnpj)
+            setInscricaoMunicipal(dadosEditar.inscricaoMunicipal)
+            setCep(dadosEditar.cep)
+            setUf(dadosEditar.uf)
+            setEndereco(dadosEditar.endereco)
+            setNumeroEndereco(dadosEditar.numeroEndereco)
+            setComplementoEndereco(dadosEditar.complementoEndereco)
+            setBairro(dadosEditar.bairro)
+            setTelefone(dadosEditar.telefone)
+            setEmail(dadosEditar.email)
+            setRazaoReduzida(dadosEditar.razaoReduzida)
+            setDataDeCadastro(dadosEditar.dataDeCadastro)
+            setIndicacao(dadosEditar.indicacao)
+            setComissao(dadosEditar.comissao)
+        }
+        setConferirDados(true)
+    }
 
     const [visible, setVisible] = useState(false)
     const [mensagem, setMensagem] = useState()
@@ -33,45 +66,66 @@ export default function RegisterClient({ onClose = () => {} }) {
     const [email, setEmail] = useState()
     const [razaoReduzida, setRazaoReduzida] = useState()
     const [dataDeCadastro, setDataDeCadastro] = useState()
-    const [indicaao, setIndicacao] = useState()
+    const [indicacao, setIndicacao] = useState()
     const [comissao, setComissao] = useState()
 
-    const confirmaDados = () => {
-        if(nomeRazaoSocial){
-            let query = [{nomeRazaoSocial:nomeRazaoSocial, cpfOuCnpj:cpfOuCnpj, inscricaoMunicipal:inscricaoMunicipal, cep:cep, uf:uf, endereco:endereco, numeroEndereco:numeroEndereco}]
-            console.log(query)
-            Cliente.create(query)
+    const limparDados = () => {
+        setNomeRazaoSocial('')
+        setCpfOuCnpj('')
+        setInscricaoMunicipal('')
+        setCep('')
+        setUf('')
+        setEndereco('')
+        setNumeroEndereco('')
+        setComplementoEndereco('')
+        setBairro('')
+        setTelefone('')
+        setEmail('')
+        setRazaoReduzida('')
+        setDataDeCadastro('')
+        setIndicacao('')
+        setComissao('')
+    }
+
+    const confirmaDados = async () => {
+
+        let criado = false
+
+        if(nomeRazaoSocial && !dadosEditar){
+            await Cliente.create({nomeRazaoSocial:nomeRazaoSocial, cpfOuCnpj:cpfOuCnpj, inscricaoMunicipal:inscricaoMunicipal, cep:cep, uf:uf, endereco:endereco, numeroEndereco:numeroEndereco, complemento: complementoEndereco, bairro: bairro, telefone: telefone, email: email, razaoReduzida: razaoReduzida, dataDeCadastro: dataDeCadastro, indicacao: indicacao, comissao: comissao})
             .then(() => {
                 console.log("criado")
+                setRespostaPost(200)
+                setMensagem("Cadastrado com sucesso!")
+                openSnackBar()   
+                criado = true
             } )
             .catch( err => {
                 console.log(err)
                 chamaError()
             })
-            setNomeRazaoSocial('')
-            setCpfOuCnpj('')
-            setInscricaoMunicipal('')
-            setCep('')
-            setUf('')
-            setEndereco('')
-            setNumeroEndereco('')
-            setComplementoEndereco('')
-            setBairro('')
-            setTelefone('')
-            setEmail('')
-            setRazaoReduzida('')
-            setDataDeCadastro('')
-            setIndicacao('')
-            setComissao('')
-            setRespostaPost(200)
-            setMensagem("Cadastrado com sucesso!")
-            openSnackBar()   
-            onClose(query)
-        } else{
+        }else if(nomeRazaoSocial && dadosEditar){
+            await Cliente.update(dadosEditar.id, {nomeRazaoSocial:nomeRazaoSocial, cpfOuCnpj:cpfOuCnpj, inscricaoMunicipal:inscricaoMunicipal, cep:cep, uf:uf, endereco:endereco, numeroEndereco:numeroEndereco, complemento: complementoEndereco, bairro: bairro, telefone: telefone, email: email, razaoReduzida: razaoReduzida, dataDeCadastro: dataDeCadastro, indicacao: indicacao, comissao: comissao})
+            .then((id, numero) => {
+                setRespostaPost(200)
+                setMensagem("Editado com sucesso!")
+                openSnackBar()   
+                criado = true
+            })
+            .catch((err) => console.log(`\n\n\n\n${err}\n\n\n\n`))
+        }
+        else{
             setRespostaPost(404)
             setMensagem("Faltam dados para terminar registro")
             openSnackBar()
         }
+        if(criado === true){
+            setDadosEditar(null)
+            limparDados()
+            onClose()
+            route.params.dados = null
+        } 
+        
     }
 
     const chamaError = () => {
@@ -90,7 +144,7 @@ export default function RegisterClient({ onClose = () => {} }) {
                 <View style = {styles.titleTracer} />
             </View>
 
-            <ScrollView
+            {conferirDados ? <ScrollView
                 style = {{width: '90%'}}
                 showsVerticalScrollIndicator = {false}
             >
@@ -99,12 +153,14 @@ export default function RegisterClient({ onClose = () => {} }) {
                     console.log(e)
                     setNomeRazaoSocial(e)
                     }}/>
-                <FormRegister titleInput = {'CPF/CNPJ'} type = {'numeric'} data={cpfOuCnpj} onClose={(e) => {setCpfOuCnpj(e)}}/>
+                
+                <FormRegister titleInput = {'CPF/CNPJ'} type = {'numeric'} data={cpfOuCnpj} onClose={(e) => {setCpfOuCnpj(e.replace(/[^0-9.,]+/g, ''))}} palceHolder="XXX.XXX.XXX-XX"/>
+                
                 <FormRegister titleInput = {'Inscrição Municipal'} data={inscricaoMunicipal} onClose={(e) => {setInscricaoMunicipal(e)}}/>
 
                 <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
 
-                    <FormRegister titleInput = {'CEP'} width={'55%'} type = {'numeric'} data={cep} onClose={(e) => {setCep(e)}}/>
+                    <FormRegister titleInput = {'CEP'} width={'55%'} type = {'numeric'} data={cep} onClose={(e) => {setCep(e.replace(/[A-z]+/g, ''))}} palceHolder="XXXXX-XXX"/>
                     <FormRegister titleInput = {'UF'} width={'35%'} data={uf} onClose={(e) => {setUf(e)}}/>
 
                 </View>                    
@@ -113,22 +169,30 @@ export default function RegisterClient({ onClose = () => {} }) {
 
                 <View style = {{flexDirection: "row", justifyContent: 'space-between'}}>
 
-                    <FormRegister titleInput = {'Número'} width={'35%'} type = {'numeric'} data={numeroEndereco} onClose={(e) => {setNumeroEndereco(e)}}/>
+                    <FormRegister titleInput = {'Número'} width={'35%'} type = {'numeric'} data={numeroEndereco} onClose={(e) => {setNumeroEndereco(e.replace(/[^0-9.,]+/g, ''))}}/>
+                    
                     <FormRegister titleInput = {'Complemento'} width={'55%'} data={complementoEndereco} onClose={(e) => {setComplementoEndereco(e)}}/>
 
                 </View>
 
+                
                 <FormRegister titleInput = {'Bairro'} data={bairro} onClose={(e) => {setBairro(e)}}/>
-                <FormRegister titleInput = {'Telefone'} type = {'numeric'} data={telefone} onClose={(e) => {setTelefone(e)}}/>
-                <FormRegister titleInput = {'Email'} type = {'email-address'} data={email} onClose={(e) => {setEmail(e)}}/>
+                
+                <FormRegister titleInput = {'Telefone'} type = {'numeric'} data={telefone} onClose={(e) => {setTelefone(e.replace(/[A-z]+/g, ''))}} palceHolder="(XX) XXXXX-XXXX"/>
+                
+                <FormRegister titleInput = {'Email'} type = {'email-address'} data={email} onClose={(e) => {setEmail(e)}} palceHolder="exemplo@email.com"/>
+                
                 <FormRegister titleInput = {'Razão Reduzida'} data={razaoReduzida} onClose={(e) => {setRazaoReduzida(e)}}/>
-                <FormRegister titleInput = {'Data de Cadastro'} type = {'numeric'} data={dataDeCadastro} onClose={(e) => {setDataDeCadastro(e)}}/>
-                <FormRegister titleInput = {'Indicação'} data={indicaao} onClose={(e) => {setIndicacao(e)}}/>
-                <FormRegister titleInput = {'Comissão'} type = {'numeric'} data={comissao} onClose={(e) => {setComissao(e)}}/>
+                
+                <FormRegister titleInput = {'Data de Cadastro'} type = {'numeric'} data={dataDeCadastro} onClose={(e) => {setDataDeCadastro(e.replace(/[^0-9/]+/g, ''))}} palceHolder="XX/XX/XXXX"/>
+                
+                <FormRegister titleInput = {'Indicação'} data={indicacao} onClose={(e) => {setIndicacao(e)}}/>
+                
+                <FormRegister titleInput = {'Comissão'} type = {'numeric'} data={comissao} onClose={(e) => {setComissao(e.replace(/[^0-9.,]+/g, ''))}} palceHolder="R$"/>
 
-                <ButtonForm pressionado={() => confirmaDados()}/>
+                <ButtonForm pressionado={() => {confirmaDados()}}/>
 
-            </ScrollView>
+            </ScrollView> : <ActivityIndicator color="#5ED9FC" size={100} style={styles.loading} animating={true} />}
 
             <Snackbar
                     visible={visible}
@@ -172,4 +236,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
     },
+    loading: {
+        display: "flex",
+        alignSelf: "center",
+        justifyContent: "center",
+        marginTop: 240
+    }
 })

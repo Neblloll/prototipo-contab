@@ -5,7 +5,7 @@ import { faPen, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { ActivityIndicator, Dialog, Text, PaperProvider, List, TouchableRipple, Button  } from 'react-native-paper';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-export default function Clients({ teste }) {
+export default function Clients({ onClose = () => {} }) {
 
     const [visible, setVisible] = useState(false);
 
@@ -15,11 +15,10 @@ export default function Clients({ teste }) {
     const [clientesBuscados, setClientesBuscados] = useState(false)
     const [clienteDeletado, setClienteDeletado] = useState()
     const [nomeClienteDeletado, setNomeClienteDeletado] = useState()
-    const [atualizar, setAtualizar] = useState(false)
 
     useEffect(() => {
         buscaClientes()
-    }, [teste, atualizar])
+    }, [])
 
     const buscaClientes = async () => {
         await Cliente.all()
@@ -38,7 +37,7 @@ export default function Clients({ teste }) {
         .then((e) => console.log(`\n\n\n\nFOI: ${e}`))
         .catch((err) => console.log(`\n\n\n\nERROR: ${err}`))
         hideDialog()
-        setAtualizar(true)
+        buscaClientes()
     }
 
 
@@ -75,7 +74,7 @@ export default function Clients({ teste }) {
                         overflow: "hidden"
                     }}
                     descriptionNumberOfLines={1}
-                    description={elem.id}
+                    description={elem.cpfOuCnpj}
                     title={elem.nomeRazaoSocial}
                     right={props => <View style = {{        
                         height: 50,
@@ -88,8 +87,8 @@ export default function Clients({ teste }) {
                             <FontAwesomeIcon icon={faUser} size={30}/>
                         </View>}
                     >
-                        <List.Item right={props =>(<>
-                        <List.Item title={<FontAwesomeIcon icon={faPen} color="#5ED9FC"/>} onPress={() => console.log(elem)}/>
+                        <List.Item title={elem.email} right={props =>(<>
+                        <List.Item title={<FontAwesomeIcon icon={faPen} color="#5ED9FC"/>} onPress={() => onClose(elem)}/>
                         <List.Item title={<FontAwesomeIcon icon={faTrash} color="red"/>} onPress={() => {deletaCliente(elem)}}/>
                         </>
                         )}/>

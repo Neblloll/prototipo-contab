@@ -50,11 +50,18 @@ export default function TabRoutes() {
         navigation.navigate('register-nfe', {dados: e})
 
     }
+    const chamaEditorDeClient = (e) => {
+        navigation.navigate('register-client', {dados: e})
+
+    }
     const enviaParaNotasNotConclued = () => {
         navigation.navigate('home')
     }
     const enviaParaNotasConclued = () => {
         navigation.navigate('concluded')
+    }
+    const enviaClientes = () => {
+        navigation.navigate('clients')
     }
 
     return (
@@ -90,7 +97,11 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'concluded'
-                component ={Concluded}
+                component ={() => <Concluded onClose={(e) => {
+                    if(e){
+                        chamaEditorDeNFE(e)                
+                    }
+                }}/>}
                 
                 options = {{
                     headerTitle: 'CONLUÍDO',
@@ -159,10 +170,8 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'register-client'
-                component ={() => <RegisterClient onClose={(e) => {
-                    if(e){
-                        setAtualizaCliente(e)
-                    }
+                component ={() => <RegisterClient onClose={() => {
+                        enviaClientes()
                 }}/>}
                 options = {{
                     headerTitle: 'CADASTRO CLIENTE',
@@ -182,7 +191,9 @@ export default function TabRoutes() {
 
             <Tab.Screen
                 name = 'clients'
-                component ={() => <Clients teste={atualizaCliente} />}
+                component ={() => <Clients onClose={(e) => {
+                    if(e){chamaEditorDeClient(e)}
+                }}/>}
                 options = {{
                     headerTitle: 'CLIENTES',
                     tabBarIcon: ({ size, color, focused }) => (

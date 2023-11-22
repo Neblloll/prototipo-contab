@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Text, ActivityIndicator } from "react-native";
 
 import { ButtonForm, FormRegister } from "../../components/FormRegister";
-import { Button, Snackbar } from "react-native-paper";
+import { Button, Snackbar, TextInput } from "react-native-paper";
 import NotaFiscal from "../../services/sqlite/NFE";
 import { useRoute } from '@react-navigation/native';
 import { Checkbox } from 'react-native-paper';
-
 
 
 export default function RegisterNFE({ onClose = () => {} }) {
@@ -85,26 +84,19 @@ export default function RegisterNFE({ onClose = () => {} }) {
         setMesAno('')
     }
 
-    const confirmaDados = () => {
+    const confirmaDados = async () => {
 
-        // NotaFiscal.findByNotConcluded()
-        // .then((e) => {
-        //     console.log(e)
-        // })
-
-        // NotaFiscal.deleteTable()
-
-        let criado = true
+        let criado = false
         
         if(numero && !dadosEditar){
-            NotaFiscal.create({numero: numero, dataDeEmissao: dataDeEmissao, codVerficacao: codVerfificacao, issRetido: issRetido, competencia: competencia, valorLiquido: valorLiquido, baseDeCalculo: baseDeCalculo, valor: valor, codTributacaoMunicipal: codTributacaoMunicipal, desconto: desconto, discriminacaoDosServicos: discriminacaoDosServicos, cpfCnpj: cpfOuCnpj, razaoReduzida: razaoReduzida, bairro: bairro, uf: uf, pagamento: pagamento, vencimento: vencimento, juros: juros, valorPago: valorPago, dataImportacao: dataImportacao, impostoRetido: impostoRetido, jurosMultaAbandono: jurosAbonado, mesAno: mesAno, concluded: concluded})
+            await NotaFiscal.create({numero: numero, dataDeEmissao: dataDeEmissao, codVerficacao: codVerfificacao, issRetido: issRetido, competencia: competencia, valorLiquido: valorLiquido, baseDeCalculo: baseDeCalculo, valor: valor, codTributacaoMunicipal: codTributacaoMunicipal, desconto: desconto, discriminacaoDosServicos: discriminacaoDosServicos, cpfCnpj: cpfOuCnpj, razaoReduzida: razaoReduzida, bairro: bairro, uf: uf, pagamento: pagamento, vencimento: vencimento, juros: juros, valorPago: valorPago, dataImportacao: dataImportacao, impostoRetido: impostoRetido, jurosMultaAbandono: jurosAbonado, mesAno: mesAno, concluded: concluded})
             .then((id, numero) => {
                 console.log(`\n\n\n\nNota fiscal criada com id: ${id} e numero: ${numero}\n\n\n\n`)
                 criado = true
             })
             .catch((err) => console.log(`\n\n\n\n${err}\n\n\n\n`))
         } else if(numero && dadosEditar){
-            NotaFiscal.update(dadosEditar.id, {numero: numero, dataDeEmissao: dataDeEmissao, codVerficacao: codVerfificacao, issRetido: issRetido, competencia: competencia, valorLiquido: valorLiquido, baseDeCalculo: baseDeCalculo, valor: valor, codTributacaoMunicipal: codTributacaoMunicipal, desconto: desconto, discriminacaoDosServicos: discriminacaoDosServicos, cpfCnpj: cpfOuCnpj, razaoReduzida: razaoReduzida, bairro: bairro, uf: uf, pagamento: pagamento, vencimento: vencimento, juros: juros, valorPago: valorPago, dataImportacao: dataImportacao, impostoRetido: impostoRetido, jurosMultaAbandono: jurosAbonado, mesAno: mesAno, concluded: concluded})
+            await NotaFiscal.update(dadosEditar.id, {numero: numero, dataDeEmissao: dataDeEmissao, codVerficacao: codVerfificacao, issRetido: issRetido, competencia: competencia, valorLiquido: valorLiquido, baseDeCalculo: baseDeCalculo, valor: valor, codTributacaoMunicipal: codTributacaoMunicipal, desconto: desconto, discriminacaoDosServicos: discriminacaoDosServicos, cpfCnpj: cpfOuCnpj, razaoReduzida: razaoReduzida, bairro: bairro, uf: uf, pagamento: pagamento, vencimento: vencimento, juros: juros, valorPago: valorPago, dataImportacao: dataImportacao, impostoRetido: impostoRetido, jurosMultaAbandono: jurosAbonado, mesAno: mesAno, concluded: concluded})
             .then((id, numero) => {
                 console.log(`\n\n\n\nNota fiscal editada com id: ${id} e numero: ${numero}\n\n\n\n`)
                 criado = true
@@ -123,7 +115,7 @@ export default function RegisterNFE({ onClose = () => {} }) {
 
     useEffect(() => {
         preencheDados()
-    }, [dadosEditar])
+    }, [])
 
     const [conferirDados, setConferirDados] = useState(false)
 
@@ -152,7 +144,9 @@ export default function RegisterNFE({ onClose = () => {} }) {
             setImpostoRetido(dadosEditar.impostoRetido)
             setJurosAbonado(dadosEditar.jurosMultaAbandono)
             setMesAno(dadosEditar.mesAno)
-            setConcluded(dadosEditar.concluded)
+            setConcluded(dadosEditar.concluded === "0" ? false : true)
+            setChecked(dadosEditar.concluded === "0" ? false : true)
+            console.log(dadosEditar.concluded === "0" ? false : true)
         }
         setConferirDados(true)
     }
@@ -171,14 +165,16 @@ export default function RegisterNFE({ onClose = () => {} }) {
                 style = {{width: '90%'}}
                 showsVerticalScrollIndicator = {false}
             >
+                
+
                 <View style = {styles.formHorizontal}>
 
                     <FormRegister titleInput = {'Número'} width={'45%'} type={'numeric'} onClose={(e) => {
                         setNumero(e)
                     }} data={numero}/>
                     <FormRegister titleInput = {'Data de emissão'} width={'45%'} type={'numeric'} onClose={(e) => {
-                      setDataDeEmissao(e)  
-                    }} data={dataDeEmissao}/>
+                      setDataDeEmissao(e.replace(/[^0-9/]+/g, ''))  
+                    }} data={dataDeEmissao} palceHolder='DD/MM/AAAA'/>
                     
                 </View>
 
@@ -188,8 +184,8 @@ export default function RegisterNFE({ onClose = () => {} }) {
                         setCodVerificacao(e)
                     }} data={codVerfificacao}/>
                     <FormRegister titleInput = {'Iss retido'} width={'45%'} type={'numeric'} onClose={(e) => { 
-                        setIssRetido(e)
-                    }} data={issRetido}/>
+                        setIssRetido(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={issRetido} palceHolder='R$'/>
 
                 </View>
 
@@ -199,8 +195,8 @@ export default function RegisterNFE({ onClose = () => {} }) {
                         setCompetencia(e)
                     }} data={competencia}/>
                     <FormRegister titleInput = {'Valor liquido'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setValorLiquido(e)
-                    }} data={valorLiquido}/>
+                        setValorLiquido(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={valorLiquido} palceHolder='R$'/>
 
                 </View>
 
@@ -210,8 +206,8 @@ export default function RegisterNFE({ onClose = () => {} }) {
                         setBaseDeCalculo(e)
                     }} data={baseDeCalculo}/>
                     <FormRegister titleInput = {'Valor'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setValor(e)
-                    }} data={valor}/>
+                        setValor(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={valor} palceHolder='R$'/>
 
                 </View>
 
@@ -221,8 +217,8 @@ export default function RegisterNFE({ onClose = () => {} }) {
                         setCodTributacaoMunicipal(e)
                     }} data={codTributacaoMunicipal}/>
                     <FormRegister titleInput = {'Desconto'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setDesconto(e)
-                    }} data={desconto}/>
+                        setDesconto(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={desconto} palceHolder='R$'/>
 
                 </View>
 
@@ -233,8 +229,8 @@ export default function RegisterNFE({ onClose = () => {} }) {
                 <View style = {styles.formHorizontal}>
 
                     <FormRegister titleInput = {'CPF/CNPJ'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setCpfOuCnpj(e)
-                    }} data={cpfOuCnpj}/>
+                        setCpfOuCnpj(e.replace(/[^0-9]/g, ''))
+                    }} data={cpfOuCnpj} palceHolder='XXX.XXX.XXX-XX'/>
                     <FormRegister titleInput = {'Razão Reduzida'} width={'45%'} type={'numeric'} onClose={(e) => {
                         setRazaoReduzida(e)
                     }} data={razaoReduzida}/>
@@ -255,54 +251,56 @@ export default function RegisterNFE({ onClose = () => {} }) {
                 <View style = {styles.formHorizontal}>
 
                     <FormRegister titleInput = {'Pagamento'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setPagamento(e)
-                    }} data={pagamento}/>
+                        setPagamento(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={pagamento} palceHolder="R$"/>
                     <FormRegister titleInput = {'Vencimento'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setVencimento(e)
-                    }} data={vencimento}/>
+                        setVencimento(e.replace(/[^0-9/]+/g, ''))
+                    }} data={vencimento} palceHolder="XX/XX/XXXX"/>
 
                 </View>
                 
                 <View style = {styles.formHorizontal}>
 
                     <FormRegister titleInput = {'Juros'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setJuros(e)
-                    }} data={juros}/>
+                        setJuros(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={juros} palceHolder="R$"/>
                     <FormRegister titleInput = {'Valor pago'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setValorPago(e)
-                    }} data={valorPago}/>
+                        setValorPago(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={valorPago} palceHolder="R$"/>
 
                 </View>
 
                 <View style = {styles.formHorizontal}>
 
                     <FormRegister titleInput = {'Importada em'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setDataImpotacao(e)
-                    }} data={dataImportacao}/>
+                        setDataImpotacao(e.replace(/[^0-9/]+/g, ''))
+                    }} data={dataImportacao} palceHolder="XX/XX/XXXX"/>
                     <FormRegister titleInput = {'Imposto Retido'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setImpostoRetido(e)
-                    }} data={impostoRetido}/>
+                        setImpostoRetido(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={impostoRetido} palceHolder="R$"/>
 
                 </View>
                 
                 <View style = {styles.formHorizontal}>
 
                     <FormRegister titleInput = {'Juros Abonada'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setJurosAbonado(e)
-                    }} data={jurosAbonado}/>
+                        setJurosAbonado(e.replace(/[^0-9.,]+/g, ''))
+                    }} data={jurosAbonado} palceHolder="R$"/>
                     <FormRegister titleInput = {'Mês/Ano'} width={'45%'} type={'numeric'} onClose={(e) => {
-                        setMesAno(e)
-                    }} data={mesAno}/>
+                        setMesAno(e.replace(/[^0-9/]+/g, ''))
+                    }} data={mesAno} palceHolder="XX/XX/XXXX"/>
 
                 </View>
 
                 <Checkbox.Item
                 status={checked ? 'checked' : 'unchecked'}
                 onPress={() => {
-                    console.log(concluded)
-                    console.log(checked)
+                    console.log("antes " + concluded)
+                    console.log("antes " + checked)
                     setChecked(!checked);
-                    setConcluded(checked)
+                    setConcluded(!checked)
+                    console.log("depois " + concluded)
+                    console.log("depois " + checked)
                 }}
                 label="Conclued"
                 />

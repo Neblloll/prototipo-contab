@@ -3,7 +3,7 @@ import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button,TextInput } from "react-native-paper";
 
-export function FormRegister({ titleInput, width, height, type, multiline, data, onClose = () =>{}}) {
+export function FormRegister({ palceHolder, titleInput, width, height, type, multiline, data, onClose = () =>{}}) {
 
 
     return(
@@ -15,6 +15,7 @@ export function FormRegister({ titleInput, width, height, type, multiline, data,
                 activeOutlineColor = '#075A90'
                 mode = 'outlined'
                 label={titleInput}
+                placeholder={palceHolder || false}
                 keyboardType = {type || 'default'}
                 autoCapitalize = "words"
                 multiline = {multiline || false}

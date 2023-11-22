@@ -2,7 +2,7 @@ import db from "./SQLiteDatabse";
 
 db.transaction((tx) => {
   tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nomeRazaoSocial TEXT, cpfOuCnpj TEXT, inscricaoMunicipal TEXT, cep INT, uf TEXT, endereco TEXT, numeroEndereco INT);"
+    "CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nomeRazaoSocial TEXT, cpfOuCnpj TEXT, inscricaoMunicipal TEXT, cep TEXT, uf TEXT, endereco TEXT, numeroEndereco TEXT, complemento TEXT, bairro TEXT, telefone TEXT, email TEXT, razaoReduzida TEXT, dataDeCadastro TEXT, indicacao TEXT, comissao TEXT );"
   );
 });
 
@@ -10,8 +10,8 @@ const create = (obj) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO clientes (nomeRazaoSocial, cpfOuCnpj, inscricaoMunicipal, cep, uf, endereco, numeroEndereco) values (?, ?, ?, ?, ?, ?, ?);",
-        [obj.nomeRazaoSocial, obj.cpfOuCnpj, obj.inscricaoMunicipal, obj.cep, obj.uf, obj.endereco, obj.numeroEndereco],
+        "INSERT INTO clientes (nomeRazaoSocial, cpfOuCnpj, inscricaoMunicipal, cep, uf, endereco, numeroEndereco, complemento, bairro, telefone, email, razaoReduzida, dataDeCadastro, indicacao, comissao) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );",
+        [obj.nomeRazaoSocial, obj.cpfOuCnpj, obj.inscricaoMunicipal, obj.cep, obj.uf, obj.endereco, obj.numeroEndereco, obj.complemento, obj.bairro, obj.telefone, obj.email, obj.razaoReduzida, obj.dataDeCadastro, obj.indicacao, obj.comissao],
         (_, { rowsAffected, insertId }) => {
           if (rowsAffected > 0) resolve(insertId);
           else reject("Error inserting obj: " + JSON.stringify(obj));
@@ -26,8 +26,8 @@ const update = (id, obj) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "UPDATE clientes SET nomeRazaoSocial=?, cpfOuCnpj=?, inscricaoMunicipal=?, cep=?, uf=?, endereco=?, numeroEndereco=? WHERE id=?;",
-        [obj.nomeRazaoSocial, obj.cpfOuCnpj, obj.inscricaoMunicipal, obj.cep, obj.uf, obj.endereco, obj.numeroEndereco, id],
+        "UPDATE clientes SET nomeRazaoSocial=?, cpfOuCnpj=?, inscricaoMunicipal=?, cep=?, uf=?, endereco=?, numeroEndereco=?, complemento=?, bairro=?, telefone=?, email=?, razaoReduzida=?, dataDeCadastro=?, indicacao=?, comissao=? WHERE id=?;",
+        [obj.nomeRazaoSocial, obj.cpfOuCnpj, obj.inscricaoMunicipal, obj.cep, obj.uf, obj.endereco, obj.numeroEndereco, obj.complemento, obj.bairro, obj.telefone, obj.email, obj.razaoReduzida, obj.dataDeCadastro, obj.indicacao, obj.comissao, id],
         (_, { rowsAffected }) => {
           if (rowsAffected > 0) resolve(rowsAffected);
           else reject("Error updating obj: id=" + id);
